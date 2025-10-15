@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Zion's Tank</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><a href="index.html" style="color: #FFFFFF; text-decoration: none;">Zion's Tank</a></h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="directory.html">Directory</a></li>
+                    <li><a href="marketplace.html">Marketplace</a></li>
+                    <li><a href="events.html">Events</a></li>
+                    <li class="nav-item-auth" style="display: none;"><a href="profile.html">Profile</a></li>
+                    <li class="nav-item-auth" style="display: none;"><button id="messages-btn" class="nav-button"><i class="fas fa-envelope"></i> Messages</button></li>
+                    <li><button id="account-btn" class="nav-button"><i class="fas fa-user"></i></button></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h2>Member Profile & Benefits</h2>
+                <p>Access your personalized dashboard, manage your business profile, and explore exclusive member benefits.</p>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+                <div class="registration-container">
+                    <div class="registration-header">
+                        <h2 class="registration-title">Member Profile</h2>
+                        <p class="registration-subtitle">Manage your account information and preferences</p>
+                    </div>
+
+                    <!-- Profile Navigation Tabs -->
+                    <div class="admin-tabs">
+                        <button class="admin-tab active" onclick="showProfileTab('view')">View Profile</button>
+                        <button class="admin-tab" onclick="showProfileTab('edit')">Edit Profile</button>
+                        <button class="admin-tab" onclick="showProfileTab('security')">Security</button>
+                        <button class="admin-tab" id="verification-tab-btn" onclick="showProfileTab('verification')" style="display: none;">Verification</button>
+                    </div>
+
+                    <!-- View Profile Tab -->
+                    <div id="view-profile-tab" class="admin-tab-content active">
+                        <div class="form-section">
+                            <h3 class="review-title">Profile Information</h3>
+                            <div id="profile-view-content">
+                                <!-- Profile information will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Edit Profile Tab -->
+                    <div id="edit-profile-tab" class="admin-tab-content">
+                        <div class="form-section">
+                            <h3 class="review-title">Edit Profile</h3>
+                            <form id="edit-profile-form">
+                                <div class="form-group">
+                                    <label for="edit-firstname">First Name *</label>
+                                    <input type="text" id="edit-firstname" name="firstName" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="edit-lastname">Last Name *</label>
+                                    <input type="text" id="edit-lastname" name="lastName" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="edit-email">Email *</label>
+                                    <input type="email" id="edit-email" name="email" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="edit-phone">Phone Number</label>
+                                    <input type="tel" id="edit-phone" name="phoneNumber">
+                                </div>
+                                <div class="form-group">
+                                    <label for="edit-address">Address</label>
+                                    <textarea id="edit-address" name="address" rows="3"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="edit-business-name">Business Name</label>
+                                    <input type="text" id="edit-business-name" name="businessName">
+                                </div>
+                                <div class="form-group">
+                                    <label for="edit-business-description">Business Description</label>
+                                    <textarea id="edit-business-description" name="businessDescription" rows="4"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="edit-denomination">Denomination</label>
+                                    <select id="edit-denomination" name="denominationId">
+                                        <option value="">Select Denomination</option>
+                                        <!-- Denominations will be loaded here -->
+                                    </select>
+                                </div>
+                                <div class="registration-buttons">
+                                    <button type="button" class="btn-secondary" onclick="cancelEdit()">Cancel</button>
+                                    <button type="submit" class="btn-primary">Save Changes</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Security Tab -->
+                    <div id="security-tab" class="admin-tab-content">
+                        <div class="form-section">
+                            <h3 class="review-title">Change Password</h3>
+                            <form id="change-password-form">
+                                <div class="form-group">
+                                    <label for="current-password">Current Password *</label>
+                                    <input type="password" id="current-password" name="currentPassword" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="new-password">New Password *</label>
+                                    <input type="password" id="new-password" name="newPassword" required minlength="6">
+                                </div>
+                                <div class="form-group">
+                                    <label for="confirm-password">Confirm New Password *</label>
+                                    <input type="password" id="confirm-password" name="confirmPassword" required minlength="6">
+                                </div>
+                                <div class="registration-buttons">
+                                    <button type="submit" class="btn-primary">Change Password</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Verification Tab (for sellers) -->
+                    <div id="verification-tab" class="admin-tab-content">
+                        <div class="form-section">
+                            <h3 class="review-title">Seller Verification</h3>
+                            <div id="verification-status">
+                                <!-- Verification status will be loaded here -->
+                            </div>
+                            <div id="verification-form-container" style="display: none;">
+                                <p class="verification-notice">As a seller, you need to verify your identity to build trust with buyers. Please provide the following information:</p>
+                                <form id="verification-form">
+                                    <div class="form-group">
+                                        <label for="document-type">Document Type *</label>
+                                        <select id="document-type" name="documentType" required>
+                                            <option value="">Select Document Type</option>
+                                            <option value="business_license">Business License</option>
+                                            <option value="tax_id">Tax ID</option>
+                                            <option value="drivers_license">Driver's License</option>
+                                            <option value="passport">Passport</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="document-url">Document Upload *</label>
+                                        <input type="url" id="document-url" name="documentUrl" placeholder="https://example.com/document.pdf" required>
+                                        <small class="form-help">Please upload your document to a cloud storage service and provide the URL</small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="verification-notes">Additional Notes</label>
+                                        <textarea id="verification-notes" name="notes" rows="3" placeholder="Any additional information that might help with verification"></textarea>
+                                    </div>
+                                    <div class="registration-buttons">
+                                        <button type="submit" class="btn-primary">Submit Verification Request</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Messages Popover -->
+    <div id="messages-popover" class="popover">
+        <div class="popover-content">
+            <h3>Your Messages</h3>
+            <div id="messages-list">
+                <!-- Messages will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Account Popover -->
+    <div id="account-popover" class="popover">
+        <div class="popover-content">
+            <h3>Account</h3>
+            <button id="login-btn" class="cta-button">Login</button>
+            <button id="register-btn" class="cta-button">Register</button>
+        </div>
+    </div>
+
+    <!-- Auth Modals -->
+    <div id="login-modal" class="auth-modal">
+        <div class="auth-modal-content">
+            <button class="auth-modal-close" id="login-close">&times;</button>
+            <form class="auth-form" id="login-form">
+                <h2>Login to Your Account</h2>
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" name="password" required>
+                </div>
+                <button type="submit" class="auth-button" id="login-submit">Login</button>
+                <div class="auth-link">
+                    <a href="#" id="show-register">Don't have an account? Register here</a>
+                </div>
+                <div id="login-message"></div>
+            </form>
+        </div>
+    </div>
+
+    <div id="register-modal" class="auth-modal">
+        <div class="auth-modal-content">
+            <button class="auth-modal-close" id="register-close">&times;</button>
+            <form class="auth-form" id="register-form">
+                <h2>Create Your Account</h2>
+                <div class="form-group">
+                    <label for="register-firstname">First Name</label>
+                    <input type="text" id="register-firstname" name="firstName" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-lastname">Last Name</label>
+                    <input type="text" id="register-lastname" name="lastName" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-email">Email</label>
+                    <input type="email" id="register-email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-password">Password</label>
+                    <input type="password" id="register-password" name="password" required minlength="6">
+                </div>
+                <button type="submit" class="auth-button" id="register-submit">Register</button>
+                <div class="auth-link">
+                    <a href="#" id="show-login">Already have an account? Login here</a>
+                </div>
+                <div id="register-message"></div>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem;">
+                <div>
+                    <h4 style="color: white; margin-bottom: 0.8rem; font-size: 1rem;">Quick Links</h4>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="margin-bottom: 0.3rem;"><a href="index.html" style="color: #E6F3FF; text-decoration: none; font-size: 0.85rem;">Home</a></li>
+                        <li style="margin-bottom: 0.3rem;"><a href="directory.html" style="color: #E6F3FF; text-decoration: none; font-size: 0.85rem;">Directory</a></li>
+                        <li style="margin-bottom: 0.3rem;"><a href="marketplace.html" style="color: #E6F3FF; text-decoration: none; font-size: 0.85rem;">Marketplace</a></li>
+                        <li style="margin-bottom: 0.3rem;"><a href="#" style="color: #E6F3FF; text-decoration: none; font-size: 0.85rem;">Events</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 style="color: white; margin-bottom: 0.8rem; font-size: 1rem;">Membership</h4>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="margin-bottom: 0.3rem;"><a href="#" style="color: #E6F3FF; text-decoration: none; font-size: 0.85rem;">Join Zion's Tank</a></li>
+                        <li style="margin-bottom: 0.3rem;"><a href="#" style="color: #E6F3FF; text-decoration: none; font-size: 0.85rem;">Benefits</a></li>
+                        <li style="margin-bottom: 0.3rem;"><a href="#" style="color: #E6F3FF; text-decoration: none; font-size: 0.85rem;">Renew</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 style="color: white; margin-bottom: 0.8rem; font-size: 1rem;">Contact</h4>
+                    <div style="color: #E6F3FF; line-height: 1.4; font-size: 0.85rem;">
+                        <div style="margin-bottom: 0.3rem;"><i class="fas fa-phone"></i> (555) 123-4567</div>
+                        <div style="margin-bottom: 0.3rem;"><i class="fas fa-envelope"></i> info@zionstank.org</div>
+                    </div>
+                </div>
+                <div>
+                    <h4 style="color: white; margin-bottom: 0.8rem; font-size: 1rem;">Follow Us</h4>
+                    <div style="display: flex; gap: 0.8rem;">
+                        <a href="#" style="color: #D4AF37; font-size: 1.2rem;"><i class="fab fa-facebook"></i></a>
+                        <a href="#" style="color: #D4AF37; font-size: 1.2rem;"><i class="fab fa-twitter"></i></a>
+                        <a href="#" style="color: #D4AF37; font-size: 1.2rem;"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="trust-indicators">
+                <div class="trust-indicator">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Verified Members</span>
+                </div>
+                <div class="trust-indicator">
+                    <i class="fas fa-handshake"></i>
+                    <span>Trusted Partnerships</span>
+                </div>
+                <div class="trust-indicator">
+                    <i class="fas fa-award"></i>
+                    <span>Quality Assurance</span>
+                </div>
+                <div class="trust-indicator">
+                    <i class="fas fa-users"></i>
+                    <span>Community Driven</span>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1);">
+                <p style="margin: 0 0 0.5rem 0; color: #E6F3FF; font-size: 0.8rem;">&copy; 2023 Zion's Tank</p>
+                <div style="font-size: 0.75rem; color: #6C757D;">
+                    <a href="#" style="color: #6C757D; text-decoration: none; margin: 0 0.8rem;">Privacy</a>
+                    <a href="#" style="color: #6C757D; text-decoration: none; margin: 0 0.8rem;">Terms</a>
+                    <a href="#" style="color: #6C757D; text-decoration: none; margin: 0 0.8rem;">Accessibility</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <style>
+        .verification-status {
+            padding: 2rem;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .verification-status.verified {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .verification-status.pending {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+        }
+        .verification-status.rejected {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        .verification-status i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .verification-notice {
+            background: #e7f3ff;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #0066cc;
+        }
+        .form-help {
+            color: #6c757d;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+    </style>
+    <script src="js/events.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/profile.js"></script>
+</body>
+</html>

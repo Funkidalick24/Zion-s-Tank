@@ -1,0 +1,37 @@
+{
+  "name": "chamber-commerce",
+  "version": "1.0.0",
+  "description": "Chamber of Commerce Website with Denomination-Based Trust Ratings",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "migrate": "node migrations/run-migrations.js",
+    "test": "jest"
+  },
+  "keywords": [
+    "chamber-of-commerce",
+    "denomination",
+    "trust-ratings",
+    "ecommerce"
+  ],
+  "author": "Chamber Commerce Team",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-validator": "^7.0.1",
+    "helmet": "^7.0.0",
+    "jsonwebtoken": "^9.0.1",
+    "pg": "^8.11.0",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.32.1",
+    "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "jest": "^29.6.1",
+    "nodemon": "^3.0.1"
+  }
+}

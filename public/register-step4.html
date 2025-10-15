@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Step 4 - Zion's Tank</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Zion's Tank</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="directory.html">Directory</a></li>
+                    <li><a href="marketplace.html">Marketplace</a></li>
+                    <li><a href="events.html">Events</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="section">
+            <div class="container">
+                <div class="registration-container">
+                    <div class="registration-header">
+                        <h2 class="registration-title">Create Your Account</h2>
+                        <p class="registration-subtitle">Step 4 of 4 - Review & Confirm</p>
+                    </div>
+
+                    <!-- Progress indicator -->
+                    <div class="progress-container">
+                        <div class="progress-line"></div>
+                        <div class="progress-step completed">✓</div>
+                        <div class="progress-step completed">✓</div>
+                        <div class="progress-step completed">✓</div>
+                        <div class="progress-step active">4</div>
+                    </div>
+
+                    <div id="register-message"></div>
+
+                    <!-- Review Information -->
+                    <div class="review-section">
+                        <h3 class="review-title">Review Your Information</h3>
+                        <div id="review-content" class="review-grid">
+                            <!-- Content will be loaded dynamically -->
+                        </div>
+                    </div>
+
+                    <div class="registration-buttons">
+                        <button type="button" onclick="goBack()" class="btn-secondary">Back</button>
+                        <button type="button" onclick="completeRegistration()" class="btn-primary" id="complete-btn">Complete Registration</button>
+                    </div>
+
+                    <div class="registration-links">
+                        <p><a href="index.html">Back to Home</a></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div style="text-align: center; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1);">
+                <p style="margin: 0 0 0.5rem 0; color: #E6F3FF; font-size: 0.8rem;">&copy; 2023 Zion's Tank</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Load and display review information
+        document.addEventListener('DOMContentLoaded', function() {
+            const registrationData = JSON.parse(sessionStorage.getItem('registrationData') || '{}');
+
+            if (!registrationData.firstName) {
+                // No data, redirect to step 1
+                window.location.href = 'register-step1.html';
+                return;
+            }
+
+            displayReview(registrationData);
+        });
+
+        function displayReview(data) {
+            const reviewContent = document.getElementById('review-content');
+
+            // Get denomination name if available
+            let denominationName = 'Not specified';
+            if (data.denominationId) {
+                // In a real app, you'd fetch the denomination name
+                denominationName = `Denomination ID: ${data.denominationId}`;
+            }
+
+            const roleLabels = {
+                'buyer': 'Buyer - Looking for products/services',
+                'seller': 'Seller - Offering products/services',
+                'both': 'Both - Buying and selling'
+            };
+
+            reviewContent.innerHTML = `
+                <div style="display: grid; gap: 1rem;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div><strong>Name:</strong> ${data.firstName} ${data.lastName}</div>
+                        <div><strong>Email:</strong> ${data.email}</div>
+                        <div><strong>Phone:</strong> ${data.phoneNumber || 'Not provided'}</div>
+                        <div><strong>Role:</strong> ${roleLabels[data.role] || data.role}</div>
+                    </div>
+
+                    ${data.businessName ? `<div><strong>Business Name:</strong> ${data.businessName}</div>` : ''}
+                    ${data.businessDescription ? `<div><strong>Business Description:</strong> ${data.businessDescription}</div>` : ''}
+                    ${data.address ? `<div><strong>Address:</strong> ${data.address}</div>` : ''}
+
+                    <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #E6F3FF;">
+                        <div><strong>Denomination:</strong> ${denominationName}</div>
+                        <div style="margin-top: 0.5rem;">
+                            <strong>Agreements:</strong>
+                            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+                                <li>Terms of Service: ${data.agreeTerms ? '✓ Agreed' : '✗ Not agreed'}</li>
+                                <li>Marketing Communications: ${data.agreeMarketing ? '✓ Subscribed' : '✗ Not subscribed'}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        async function completeRegistration() {
+            const registrationData = JSON.parse(sessionStorage.getItem('registrationData') || '{}');
+            const completeBtn = document.getElementById('complete-btn');
+            const originalText = completeBtn.textContent;
+
+            completeBtn.textContent = 'Creating Account...';
+            completeBtn.disabled = true;
+
+            try {
+                const response = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(registrationData)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // Clear session data
+                    sessionStorage.removeItem('registrationData');
+
+                    // Store auth data
+                    localStorage.setItem('authToken', result.token);
+                    localStorage.setItem('currentUser', JSON.stringify(result.user));
+
+                    showMessage('register-message', 'Registration successful! Welcome to Zion\'s Tank!', 'success');
+
+                    setTimeout(() => {
+                        window.location.href = 'profile.html';
+                    }, 2000);
+                } else {
+                    showMessage('register-message', result.message || 'Registration failed', 'error');
+                }
+            } catch (error) {
+                console.error('Registration error:', error);
+                showMessage('register-message', 'Network error. Please try again.', 'error');
+            } finally {
+                completeBtn.textContent = originalText;
+                completeBtn.disabled = false;
+            }
+        }
+
+        function goBack() {
+            window.location.href = 'register-step3.html';
+        }
+
+        function showMessage(elementId, message, type) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.innerHTML = `<div class="message ${type}">${message}</div>`;
+            }
+        }
+    </script>
+</body>
+</html>

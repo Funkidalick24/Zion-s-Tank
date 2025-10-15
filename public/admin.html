@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Zion's Tank</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Zion's Tank</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="directory.html">Directory</a></li>
+                    <li><a href="marketplace.html">Marketplace</a></li>
+                    <li><a href="events.html">Events</a></li>
+                    <li class="nav-item-auth"><a href="profile.html">Profile</a></li>
+                    <li class="nav-item-auth"><button id="messages-btn" class="nav-button"><i class="fas fa-envelope"></i> Messages</button></li>
+                    <li><button id="account-btn" class="nav-button"><i class="fas fa-user"></i></button></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="section">
+            <div class="container">
+                <div class="registration-container">
+                    <div class="registration-header">
+                        <h2 class="registration-title">Admin Dashboard</h2>
+                        <p class="registration-subtitle">Manage users, denominations, and system settings</p>
+                    </div>
+
+                    <!-- Admin Navigation Tabs -->
+                    <div class="admin-tabs">
+                        <button class="admin-tab active" onclick="showTab('users')">User Management</button>
+                        <button class="admin-tab" onclick="showTab('denominations')">Denominations</button>
+                        <button class="admin-tab" onclick="showTab('verification')">Verification Queue</button>
+                    </div>
+
+                    <!-- User Management Tab -->
+                    <div id="users-tab" class="admin-tab-content active">
+                        <div class="form-section">
+                            <h3 class="review-title">User Management</h3>
+                            <div id="users-list" class="admin-list">
+                                <!-- Users will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Denominations Tab -->
+                    <div id="denominations-tab" class="admin-tab-content">
+                        <div class="form-section">
+                            <h3 class="review-title">Denomination Management</h3>
+                            <div class="admin-actions">
+                                <button class="btn-primary" onclick="showAddDenominationModal()">
+                                    <i class="fas fa-plus"></i> Add Denomination
+                                </button>
+                            </div>
+                            <div id="denominations-list" class="admin-list">
+                                <!-- Denominations will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Verification Queue Tab -->
+                    <div id="verification-tab" class="admin-tab-content">
+                        <div class="form-section">
+                            <h3 class="review-title">Verification Queue</h3>
+                            <div id="verification-list" class="admin-list">
+                                <!-- Verification requests will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Add Denomination Modal -->
+    <div id="add-denomination-modal" class="auth-modal">
+        <div class="auth-modal-content">
+            <button class="auth-modal-close" onclick="hideAddDenominationModal()">&times;</button>
+            <form id="add-denomination-form">
+                <h2>Add New Denomination</h2>
+                <div class="form-group">
+                    <label for="denomination-name">Name *</label>
+                    <input type="text" id="denomination-name" name="name" required placeholder="Enter denomination name">
+                </div>
+                <div class="form-group">
+                    <label for="denomination-description">Description</label>
+                    <textarea id="denomination-description" name="description" rows="3" placeholder="Enter denomination description"></textarea>
+                </div>
+                <div class="registration-buttons">
+                    <button type="button" class="btn-secondary" onclick="hideAddDenominationModal()">Cancel</button>
+                    <button type="submit" class="btn-primary">Add Denomination</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Denomination Modal -->
+    <div id="edit-denomination-modal" class="auth-modal">
+        <div class="auth-modal-content">
+            <button class="auth-modal-close" onclick="hideEditDenominationModal()">&times;</button>
+            <form id="edit-denomination-form">
+                <h2>Edit Denomination</h2>
+                <input type="hidden" id="edit-denomination-id" name="id">
+                <div class="form-group">
+                    <label for="edit-denomination-name">Name *</label>
+                    <input type="text" id="edit-denomination-name" name="name" required placeholder="Enter denomination name">
+                </div>
+                <div class="form-group">
+                    <label for="edit-denomination-description">Description</label>
+                    <textarea id="edit-denomination-description" name="description" rows="3" placeholder="Enter denomination description"></textarea>
+                </div>
+                <div class="registration-buttons">
+                    <button type="button" class="btn-secondary" onclick="hideEditDenominationModal()">Cancel</button>
+                    <button type="submit" class="btn-primary">Update Denomination</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Messages Popover -->
+    <div id="messages-popover" class="popover">
+        <div class="popover-content">
+            <h3>Your Messages</h3>
+            <div id="messages-list">
+                <!-- Messages will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Account Popover -->
+    <div id="account-popover" class="popover">
+        <div class="popover-content">
+            <h3>Account</h3>
+            <div id="account-content">
+                <!-- Account content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>

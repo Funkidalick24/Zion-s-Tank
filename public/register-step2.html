@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Step 2 - Zion's Tank</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Zion's Tank</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="directory.html">Directory</a></li>
+                    <li><a href="marketplace.html">Marketplace</a></li>
+                    <li><a href="events.html">Events</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="section">
+            <div class="container">
+                <div class="registration-container">
+                    <div class="registration-header">
+                        <h2 class="registration-title">Create Your Account</h2>
+                        <p class="registration-subtitle">Step 2 of 4 - Contact Information</p>
+                    </div>
+
+                    <!-- Progress indicator -->
+                    <div class="progress-container">
+                        <div class="progress-line"></div>
+                        <div class="progress-step completed">✓</div>
+                        <div class="progress-step active">2</div>
+                        <div class="progress-step">3</div>
+                        <div class="progress-step">4</div>
+                    </div>
+
+                    <div id="register-message"></div>
+
+                    <div class="form-section">
+                        <form id="register-step2-form">
+                            <div class="form-group">
+                                <label for="phoneNumber">Phone Number</label>
+                                <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="+1 (555) 123-4567">
+                                <div class="form-help">Optional - Include country code for international numbers</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="address">Address</label>
+                                <input type="text" id="address" name="address" placeholder="Street address, city, state, zip">
+                                <div class="form-help">Optional - Your business or home address</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="businessName">Business Name</label>
+                                <input type="text" id="businessName" name="businessName" placeholder="Your business name">
+                                <div class="form-help">Optional - If you have a business</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="businessDescription">Business Description</label>
+                                <textarea id="businessDescription" name="businessDescription" rows="4" placeholder="Describe your business, services, or products..."></textarea>
+                                <div class="form-help">Optional - Help others understand what you do</div>
+                            </div>
+
+                            <div class="registration-buttons">
+                                <button type="button" onclick="goBack()" class="btn-secondary">Back</button>
+                                <button type="submit" class="btn-primary">Continue to Step 3</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="registration-links">
+                        <p><a href="index.html">Back to Home</a></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div style="text-align: center; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1);">
+                <p style="margin: 0 0 0.5rem 0; color: #E6F3FF; font-size: 0.8rem;">&copy; 2023 Zion's Tank</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Load existing data
+        document.addEventListener('DOMContentLoaded', function() {
+            const registrationData = JSON.parse(sessionStorage.getItem('registrationData') || '{}');
+
+            if (!registrationData.firstName) {
+                // No data, redirect to step 1
+                window.location.href = 'register-step1.html';
+                return;
+            }
+
+            // Pre-fill any existing data
+            if (registrationData.phoneNumber) {
+                document.getElementById('phoneNumber').value = registrationData.phoneNumber;
+            }
+            if (registrationData.address) {
+                document.getElementById('address').value = registrationData.address;
+            }
+            if (registrationData.businessName) {
+                document.getElementById('businessName').value = registrationData.businessName;
+            }
+            if (registrationData.businessDescription) {
+                document.getElementById('businessDescription').value = registrationData.businessDescription;
+            }
+        });
+
+        // Handle form submission
+        document.getElementById('register-step2-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Get existing data
+            const registrationData = JSON.parse(sessionStorage.getItem('registrationData') || '{}');
+
+            // Add step 2 data
+            const formData = new FormData(e.target);
+            registrationData.phoneNumber = formData.get('phoneNumber');
+            registrationData.address = formData.get('address');
+            registrationData.businessName = formData.get('businessName');
+            registrationData.businessDescription = formData.get('businessDescription');
+
+            // Store updated data
+            sessionStorage.setItem('registrationData', JSON.stringify(registrationData));
+
+            // Redirect to step 3
+            window.location.href = 'register-step3.html';
+        });
+
+        function goBack() {
+            window.location.href = 'register-step1.html';
+        }
+
+        function showMessage(elementId, message, type) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.innerHTML = `<div class="message ${type}">${message}</div>`;
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Step 3 - Zion's Tank</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Zion's Tank</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="directory.html">Directory</a></li>
+                    <li><a href="marketplace.html">Marketplace</a></li>
+                    <li><a href="events.html">Events</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="section">
+            <div class="container">
+                <div class="registration-container">
+                    <div class="registration-header">
+                        <h2 class="registration-title">Create Your Account</h2>
+                        <p class="registration-subtitle">Step 3 of 4 - Membership Details</p>
+                    </div>
+
+                    <!-- Progress indicator -->
+                    <div class="progress-container">
+                        <div class="progress-line"></div>
+                        <div class="progress-step completed">✓</div>
+                        <div class="progress-step completed">✓</div>
+                        <div class="progress-step active">3</div>
+                        <div class="progress-step">4</div>
+                    </div>
+
+                    <div id="register-message"></div>
+
+                    <div class="form-section">
+                        <form id="register-step3-form">
+                            <div class="form-group">
+                                <label for="denominationId">Denomination</label>
+                                <select id="denominationId" name="denominationId">
+                                    <option value="">Select your denomination...</option>
+                                    <!-- Denominations will be loaded dynamically -->
+                                </select>
+                                <div class="form-help">Optional - Your religious or community affiliation</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="role">Account Type *</label>
+                                <select id="role" name="role" required>
+                                    <option value="">Select account type...</option>
+                                    <option value="buyer">Buyer - Looking for products/services</option>
+                                    <option value="seller">Seller - Offering products/services</option>
+                                    <option value="both">Both - Buying and selling</option>
+                                </select>
+                                <div class="form-help">Choose how you'll use the platform</div>
+                            </div>
+
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="agreeTerms" name="agreeTerms" required>
+                                <label for="agreeTerms">
+                                    I agree to the <a href="#" style="color: #D4AF37; text-decoration: none;">Terms of Service</a> and <a href="#" style="color: #D4AF37; text-decoration: none;">Privacy Policy</a> *
+                                </label>
+                            </div>
+
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="agreeMarketing" name="agreeMarketing">
+                                <label for="agreeMarketing">
+                                    I would like to receive marketing communications and updates about new features
+                                </label>
+                            </div>
+
+                            <div class="registration-buttons">
+                                <button type="button" onclick="goBack()" class="btn-secondary">Back</button>
+                                <button type="submit" class="btn-primary">Continue to Step 4</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="registration-links">
+                        <p><a href="index.html">Back to Home</a></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div style="text-align: center; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1);">
+                <p style="margin: 0 0 0.5rem 0; color: #E6F3FF; font-size: 0.8rem;">&copy; 2023 Zion's Tank</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Load existing data and denominations
+        document.addEventListener('DOMContentLoaded', async function() {
+            const registrationData = JSON.parse(sessionStorage.getItem('registrationData') || '{}');
+
+            if (!registrationData.firstName) {
+                // No data, redirect to step 1
+                window.location.href = 'register-step1.html';
+                return;
+            }
+
+            // Pre-fill existing data
+            if (registrationData.denominationId) {
+                document.getElementById('denominationId').value = registrationData.denominationId;
+            }
+            if (registrationData.role) {
+                document.getElementById('role').value = registrationData.role;
+            }
+
+            // Load denominations
+            await loadDenominations();
+        });
+
+        async function loadDenominations() {
+            try {
+                const response = await fetch('/api/denominations');
+                if (response.ok) {
+                    const denominations = await response.json();
+                    const select = document.getElementById('denominationId');
+
+                    denominations.forEach(denomination => {
+                        const option = document.createElement('option');
+                        option.value = denomination.id;
+                        option.textContent = denomination.name;
+                        select.appendChild(option);
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading denominations:', error);
+            }
+        }
+
+        // Handle form submission
+        document.getElementById('register-step3-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Get existing data
+            const registrationData = JSON.parse(sessionStorage.getItem('registrationData') || '{}');
+
+            // Add step 3 data
+            const formData = new FormData(e.target);
+            registrationData.denominationId = formData.get('denominationId') || null;
+            registrationData.role = formData.get('role');
+            registrationData.agreeTerms = formData.get('agreeTerms') ? true : false;
+            registrationData.agreeMarketing = formData.get('agreeMarketing') ? true : false;
+
+            // Store updated data
+            sessionStorage.setItem('registrationData', JSON.stringify(registrationData));
+
+            // Redirect to step 4
+            window.location.href = 'register-step4.html';
+        });
+
+        function goBack() {
+            window.location.href = 'register-step2.html';
+        }
+
+        function showMessage(elementId, message, type) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.innerHTML = `<div class="message ${type}">${message}</div>`;
+            }
+        }
+    </script>
+</body>
+</html>
