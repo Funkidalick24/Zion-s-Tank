@@ -189,6 +189,19 @@ document.addEventListener('DOMContentLoaded', function() {
             registerBtn.style.display = 'none';
         }
     }
+
+    // Register service worker for offline functionality
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/sw.js')
+                .then(registration => {
+                    console.log('Service Worker registered successfully:', registration.scope);
+                })
+                .catch(error => {
+                    console.log('Service Worker registration failed:', error);
+                });
+        });
+    }
 });
 
 function togglePopover(popover) {
@@ -281,85 +294,118 @@ window.openMessageThread = openMessageThread;
 window.closeMessageModal = closeMessageModal;
 
 async function loadProducts(searchTerm = '', category = '', location = '', priceRange = '') {
-    try {
-        const headers = {};
-        if (authToken) {
-            headers['Authorization'] = `Bearer ${authToken}`;
-        }
+    const isOnline = navigator.onLine;
 
-        // For now, we'll create sample marketplace products
-        // In a real app, this would come from an API endpoint
-        const sampleProducts = [
-            {
-                id: 1,
-                name: "Professional Accounting Software License",
-                description: "Complete accounting software package for small businesses. Includes tax preparation tools and financial reporting.",
-                price: 299.99,
-                category: "technology",
-                location: "downtown",
-                condition: "New",
-                seller: "Premier Accounting Services"
-            },
-            {
-                id: 2,
-                name: "Commercial Kitchen Equipment Package",
-                description: "Complete set of commercial kitchen equipment including ovens, refrigerators, and prep stations. Perfect for new restaurant owners.",
-                price: 15000.00,
-                category: "food",
-                location: "south",
-                condition: "Used",
-                seller: "Green Valley Restaurant"
-            },
-            {
-                id: 3,
-                name: "Office Furniture Set",
-                description: "Complete office furniture package including desks, chairs, and storage units. Modern design, excellent condition.",
-                price: 2500.00,
-                category: "professional",
-                location: "north",
-                condition: "Used",
-                seller: "Tech Solutions Inc"
-            },
-            {
-                id: 4,
-                name: "Fitness Equipment Bundle",
-                description: "Collection of cardio and strength training equipment for home or small gym. Includes treadmills, weights, and benches.",
-                price: 3500.00,
-                category: "healthcare",
-                location: "downtown",
-                condition: "Used",
-                seller: "Downtown Fitness Center"
-            },
-            {
-                id: 5,
-                name: "Branding Package",
-                description: "Complete business branding package including logo design, business cards, letterhead, and website template.",
-                price: 1200.00,
-                category: "professional",
-                location: "west",
-                condition: "New",
-                seller: "Creative Design Studio"
-            },
-            {
-                id: 6,
-                name: "Legal Document Templates",
-                description: "Comprehensive collection of legal document templates for business use. Includes contracts, agreements, and forms.",
-                price: 150.00,
-                category: "professional",
-                location: "downtown",
-                condition: "New",
-                seller: "Smith & Associates Law Firm"
+    if (isOnline) {
+        try {
+            const headers = {};
+            if (authToken) {
+                headers['Authorization'] = `Bearer ${authToken}`;
             }
-        ];
 
-        displayProducts(sampleProducts, searchTerm, category, location);
+            // Try to fetch from API first
+            const response = await fetch('/api/products', { headers });
+            if (response.ok) {
+                const data = await response.json();
+                const products = data.products || [];
+                displayProducts(products, searchTerm, category, location);
 
-    } catch (error) {
-        console.error('Error loading products:', error);
-        const productsList = document.getElementById('products-list');
-        if (productsList) {
-            productsList.innerHTML = '<div style="text-align: center; padding: 3rem; color: #dc3545;"><i class="fas fa-exclamation-triangle" style="font-size: 3rem; margin-bottom: 1rem;"></i><h3>Error loading marketplace</h3><p>Please try again later</p></div>';
+                // Store in localStorage for offline use
+                localStorage.setItem('productsData', JSON.stringify(products));
+                localStorage.setItem('productsLastUpdated', Date.now());
+                return;
+            }
+        } catch (error) {
+            console.error('Error loading products from API:', error);
         }
+    }
+
+    // Fallback to sample data or cached data
+    const cachedData = localStorage.getItem('productsData');
+    if (cachedData) {
+        const products = JSON.parse(cachedData);
+        displayProducts(products, searchTerm, category, location);
+
+        const lastUpdated = localStorage.getItem('productsLastUpdated');
+        if (lastUpdated) {
+            const lastUpdatedDate = new Date(parseInt(lastUpdated));
+            showNotification(`Showing cached products from ${lastUpdatedDate.toLocaleString()}`, 'info');
+        }
+        return;
+    }
+
+    // Use sample data as last resort
+    const sampleProducts = [
+        {
+            id: 1,
+            name: "Professional Accounting Software License",
+            description: "Complete accounting software package for small businesses. Includes tax preparation tools and financial reporting.",
+            price: 299.99,
+            category: "technology",
+            location: "downtown",
+            condition: "New",
+            seller: "Premier Accounting Services"
+        },
+        {
+            id: 2,
+            name: "Commercial Kitchen Equipment Package",
+            description: "Complete set of commercial kitchen equipment including ovens, refrigerators, and prep stations. Perfect for new restaurant owners.",
+            price: 15000.00,
+            category: "food",
+            location: "south",
+            condition: "Used",
+            seller: "Green Valley Restaurant"
+        },
+        {
+            id: 3,
+            name: "Office Furniture Set",
+            description: "Complete office furniture package including desks, chairs, and storage units. Modern design, excellent condition.",
+            price: 2500.00,
+            category: "professional",
+            location: "north",
+            condition: "Used",
+            seller: "Tech Solutions Inc"
+        },
+        {
+            id: 4,
+            name: "Fitness Equipment Bundle",
+            description: "Collection of cardio and strength training equipment for home or small gym. Includes treadmills, weights, and benches.",
+            price: 3500.00,
+            category: "healthcare",
+            location: "downtown",
+            condition: "Used",
+            seller: "Downtown Fitness Center"
+        },
+        {
+            id: 5,
+            name: "Branding Package",
+            description: "Complete business branding package including logo design, business cards, letterhead, and website template.",
+            price: 1200.00,
+            category: "professional",
+            location: "west",
+            condition: "New",
+            seller: "Creative Design Studio"
+        },
+        {
+            id: 6,
+            name: "Legal Document Templates",
+            description: "Comprehensive collection of legal document templates for business use. Includes contracts, agreements, and forms.",
+            price: 150.00,
+            category: "professional",
+            location: "downtown",
+            condition: "New",
+            seller: "Smith & Associates Law Firm"
+        }
+    ];
+
+    displayProducts(sampleProducts, searchTerm, category, location);
+
+    // Store sample data in cache
+    localStorage.setItem('productsData', JSON.stringify(sampleProducts));
+    localStorage.setItem('productsLastUpdated', Date.now());
+
+    if (!isOnline) {
+        showNotification('Showing sample products (offline mode)', 'info');
     }
 }
 
@@ -1528,32 +1574,64 @@ async function loadDirectory(searchTerm = '', category = '', location = '', deno
     const directoryList = document.getElementById('directory-list');
     if (!directoryList) return;
 
-    try {
-        const headers = {};
-        if (authToken) {
-            headers['Authorization'] = `Bearer ${authToken}`;
+    // Check if online
+    const isOnline = navigator.onLine;
+
+    if (isOnline) {
+        try {
+            const headers = {};
+            if (authToken) {
+                headers['Authorization'] = `Bearer ${authToken}`;
+            }
+
+            // Build query parameters
+            const params = new URLSearchParams();
+            if (searchTerm) params.append('q', searchTerm);
+            if (category) params.append('category', category);
+            if (location) params.append('location', location);
+            if (denomination) params.append('denomination', denomination);
+
+            const response = await fetch(`/api/directory?${params.toString()}`, { headers });
+
+            if (response.ok) {
+                const data = await response.json();
+                const users = data.users || [];
+                displayDirectory(users);
+
+                // Store in localStorage for offline use
+                localStorage.setItem('directoryData', JSON.stringify(users));
+                localStorage.setItem('directoryLastUpdated', Date.now());
+            } else {
+                console.error('Failed to load directory:', response.status, response.statusText);
+                // Try to load from cache
+                loadDirectoryFromCache();
+            }
+        } catch (error) {
+            console.error('Error loading directory:', error);
+            // Try to load from cache
+            loadDirectoryFromCache();
         }
+    } else {
+        // Load from cache
+        loadDirectoryFromCache();
+    }
+}
 
-        // Build query parameters
-        const params = new URLSearchParams();
-        if (searchTerm) params.append('q', searchTerm);
-        if (category) params.append('category', category);
-        if (location) params.append('location', location);
-        if (denomination) params.append('denomination', denomination);
+function loadDirectoryFromCache() {
+    const cachedData = localStorage.getItem('directoryData');
+    const lastUpdated = localStorage.getItem('directoryLastUpdated');
 
-        const response = await fetch(`/api/directory?${params.toString()}`, { headers });
+    if (cachedData) {
+        const users = JSON.parse(cachedData);
+        displayDirectory(users);
 
-        if (response.ok) {
-            const data = await response.json();
-            displayDirectory(data.users || []);
-        } else {
-            console.error('Failed to load directory:', response.status, response.statusText);
-            directoryList.innerHTML = '<div style="text-align: center; padding: 3rem; color: #dc3545;"><i class="fas fa-exclamation-triangle" style="font-size: 3rem; margin-bottom: 1rem;"></i><h3>Error loading directory</h3><p>Please try again later</p></div>';
+        const lastUpdatedDate = new Date(parseInt(lastUpdated));
+        showNotification(`Showing cached data from ${lastUpdatedDate.toLocaleString()}`, 'info');
+    } else {
+        const directoryList = document.getElementById('directory-list');
+        if (directoryList) {
+            directoryList.innerHTML = '<div style="text-align: center; padding: 3rem; color: #6C757D;"><i class="fas fa-wifi" style="font-size: 3rem; color: #D4AF37; margin-bottom: 1rem;"></i><h3>No internet connection</h3><p>Cached data not available. Please check your connection.</p></div>';
         }
-
-    } catch (error) {
-        console.error('Error loading directory:', error);
-        directoryList.innerHTML = '<div style="text-align: center; padding: 3rem; color: #dc3545;"><i class="fas fa-exclamation-triangle" style="font-size: 3rem; margin-bottom: 1rem;"></i><h3>Error loading directory</h3><p>Please try again later</p></div>';
     }
 }
 

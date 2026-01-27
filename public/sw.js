@@ -5,6 +5,7 @@ const urlsToCache = [
   '/marketplace',
   '/events',
   '/contact',
+  '/offline',
   '/css/styles.css',
   '/js/app.js',
   '/manifest.json',
@@ -35,7 +36,7 @@ self.addEventListener('fetch', event => {
       .catch(() => {
         // If both cache and network fail, show offline page
         if (event.request.destination === 'document') {
-          return caches.match('/offline.html');
+          return caches.match('/offline');
         }
       })
   );

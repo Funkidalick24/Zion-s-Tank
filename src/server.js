@@ -95,6 +95,7 @@ app.get('/register-step3', optionalAuthenticate, (req, res) => res.render('layou
 app.get('/register-step4', optionalAuthenticate, (req, res) => res.render('layout', { body: 'register-step4', title: 'Register - Step 4', user: req.user }));
 app.get('/profile', optionalAuthenticate, (req, res) => res.render('layout', { body: 'profile', title: 'Profile', user: req.user }));
 app.get('/admin', optionalAuthenticate, (req, res) => res.render('layout', { body: 'admin', title: 'Admin', user: req.user }));
+app.get('/offline', (req, res) => res.sendFile(path.join(__dirname, '..', 'public', 'offline.html')));
 
 // Initialize database
 const { initializeDatabase } = require('./database/init');
