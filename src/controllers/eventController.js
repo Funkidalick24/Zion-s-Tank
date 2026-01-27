@@ -392,6 +392,85 @@ async function getMyRsvps(req, res) {
   }
 }
 
+// Render events page
+async function renderEvents(req, res) {
+  try {
+    const {
+      q,
+      eventType,
+      location,
+      page = '1',
+      limit = '20',
+      sort = 'newest'
+    } = req.query;
+
+    const pageNum = Math.max(1, parseInt(page, 10) || 1);
+    const perPage = Math.min(100, Math.max(1, parseInt(limit, 10) || 20));
+    const offset = (pageNum - 1) * perPage;
+
+    const where = { isActive: true };
+
+    if (q) {
+      where[Op.or] = [
+        { title: { [Op.iLike]: `%${q}%` } },
+        { description: { [Op.iLike]: `%${q}%` } }
+      ];
+    }
+
+    if (eventType) where.eventType = eventType;
+    if (location) where.location = { [Op.iLike]: `%${location}%` };
+
+    let order;
+    switch (sort) {
+      case 'date_asc':
+        order = [['eventDate', 'ASC'], ['startTime', 'ASC']];
+        break;
+      case 'date_desc':
+        order = [['eventDate', 'DESC'], ['startTime', 'DESC']];
+        break;
+      case 'newest':
+      default:
+        order = [['createdAt', 'DESC']];
+        break;
+    }
+
+    const { count, rows: events } = await Event.findAndCountAll({
+      where,
+      limit: perPage,
+      offset,
+      order,
+      include: [
+        {
+          model: User,
+          as: 'creator',
+          attributes: ['id', 'firstName', 'lastName', 'businessName', 'profileImageUrl']
+        }
+      ]
+    });
+
+    return res.render('layout', {
+      body: 'events',
+      title: 'Events',
+      user: req.user,
+      events,
+      pagination: {
+        currentPage: pageNum,
+        totalPages: Math.ceil(count / perPage),
+        total: count
+      },
+      filters: { q, eventType, location, sort }
+    });
+  } catch (err) {
+    console.error('renderEvents error:', err);
+    return res.status(500).render('layout', {
+      body: 'error',
+      title: 'Error',
+      user: req.user,
+      message: 'Error loading events'
+    });
+  }
+}
+
 module.exports = {
   listEvents,
   getEvent,
@@ -400,5 +479,6 @@ module.exports = {
   deleteEventController,
   rsvpToEvent,
   getMyEvents,
-  getMyRsvps
+  getMyRsvps,
+  renderEvents
 };

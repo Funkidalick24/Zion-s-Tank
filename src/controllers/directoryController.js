@@ -186,7 +186,120 @@ async function getDenominations(req, res) {
   }
 }
 
+// Render directory page with data
+async function renderDirectory(req, res) {
+  try {
+    // Get directory data (similar to getDirectory but for rendering)
+    const {
+      q,
+      category,
+      location,
+      denomination,
+      page = '1',
+      limit = '20',
+      sort = 'newest'
+    } = req.query;
+
+    const pageNum = Math.max(1, parseInt(page, 10) || 1);
+    const perPage = Math.min(100, Math.max(1, parseInt(limit, 10) || 20));
+    const offset = (pageNum - 1) * perPage;
+
+    const where = { isActive: true };
+
+    // Apply filters (same as getDirectory)
+    if (q) {
+      where[Op.or] = [
+        { businessName: { [Op.iLike]: `%${q}%` } },
+        { businessDescription: { [Op.iLike]: `%${q}%` } },
+        { firstName: { [Op.iLike]: `%${q}%` } },
+        { lastName: { [Op.iLike]: `%${q}%` } }
+      ];
+    }
+
+    if (category) {
+      const roleMapping = {
+        'retail': ['buyer', 'both'],
+        'professional': ['seller', 'both'],
+        'manufacturing': ['seller', 'both'],
+        'technology': ['seller', 'both'],
+        'healthcare': ['seller', 'both'],
+        'food': ['seller', 'both']
+      };
+
+      if (roleMapping[category]) {
+        where.role = { [Op.in]: roleMapping[category] };
+      }
+    }
+
+    if (location) {
+      where.address = { [Op.iLike]: `%${location}%` };
+    }
+
+    if (denomination) {
+      where.denominationId = denomination;
+    }
+
+    let order;
+    switch (sort) {
+      case 'name':
+        order = [['businessName', 'ASC']];
+        break;
+      case 'newest':
+      default:
+        order = [['createdAt', 'DESC']];
+        break;
+    }
+
+    const result = await User.findAndCountAll({
+      where,
+      limit: perPage,
+      offset,
+      order,
+      include: [
+        {
+          model: Denomination,
+          as: 'denomination',
+          attributes: ['id', 'name', 'description']
+        }
+      ],
+      attributes: [
+        'id', 'firstName', 'lastName', 'businessName', 'businessDescription',
+        'role', 'phoneNumber', 'address', 'profileImageUrl', 'isVerified',
+        'trustScore', 'createdAt'
+      ]
+    });
+
+    const denominations = await Denomination.findAll({
+      order: [['name', 'ASC']],
+      attributes: ['id', 'name', 'description']
+    });
+
+    return res.render('layout', {
+      body: 'directory',
+      title: 'Directory',
+      user: req.user,
+      users: result.rows,
+      denominations: denominations,
+      pagination: {
+        currentPage: pageNum,
+        totalPages: Math.ceil(result.count / perPage),
+        total: result.count
+      },
+      filters: { q, category, location, denomination, sort }
+    });
+  } catch (err) {
+    console.error('renderDirectory error:', err);
+    return res.status(500).render('layout', {
+      body: 'error',
+      title: 'Error',
+      user: req.user,
+      message: 'Error loading directory'
+    });
+  }
+}
+
 module.exports = {
   getDirectory,
-  getDenominations
+  getDenominations,
+  renderDirectory
 };

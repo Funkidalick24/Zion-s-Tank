@@ -1,0 +1,52 @@
+<!-- Auth Modals -->
+<div id="login-modal" class="auth-modal">
+    <div class="auth-modal-content">
+        <button class="auth-modal-close" id="login-close">&times;</button>
+        <form class="auth-form" id="login-form">
+            <h2>Login to Your Account</h2>
+            <div class="form-group">
+                <label for="login-email">Email</label>
+                <input type="email" id="login-email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="login-password">Password</label>
+                <input type="password" id="login-password" name="password" required>
+            </div>
+            <button type="submit" class="auth-button" id="login-submit">Login</button>
+            <div class="auth-link">
+                <a href="#" id="show-register">Don't have an account? Register here</a>
+            </div>
+            <div id="login-message"></div>
+        </form>
+    </div>
+</div>
+
+<div id="register-modal" class="auth-modal">
+    <div class="auth-modal-content">
+        <button class="auth-modal-close" id="register-close">&times;</button>
+        <form class="auth-form" id="register-form">
+            <h2>Create Your Account</h2>
+            <div class="form-group">
+                <label for="register-firstname">First Name</label>
+                <input type="text" id="register-firstname" name="firstName" required>
+            </div>
+            <div class="form-group">
+                <label for="register-lastname">Last Name</label>
+                <input type="text" id="register-lastname" name="lastName" required>
+            </div>
+            <div class="form-group">
+                <label for="register-email">Email</label>
+                <input type="email" id="register-email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="register-password">Password</label>
+                <input type="password" id="register-password" name="password" required minlength="6">
+            </div>
+            <button type="submit" class="auth-button" id="register-submit">Register</button>
+            <div class="auth-link">
+                <a href="#" id="show-login">Already have an account? Login here</a>
+            </div>
+            <div id="register-message"></div>
+        </form>
+    </div>
+</div>

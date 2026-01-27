@@ -124,6 +124,37 @@ nav ul li a:hover {
     box-shadow: 0 3px 10px rgba(93, 169, 233, 0.3);
 }
 
+.hamburger-menu {
+    display: none;
+    flex-direction: column;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    margin-left: auto;
+}
+
+.hamburger-menu span {
+    width: 25px;
+    height: 3px;
+    background: var(--clean-white);
+    margin: 3px 0;
+    transition: 0.3s;
+    display: block;
+}
+
+.hamburger-menu.active span:nth-child(1) {
+    transform: rotate(-45deg) translate(-5px, 6px);
+}
+
+.hamburger-menu.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger-menu.active span:nth-child(3) {
+    transform: rotate(45deg) translate(-5px, -6px);
+}
+
 .hero {
     background: linear-gradient(135deg, var(--soft-grey) 0%, var(--soft-grey) 50%, var(--soft-grey) 100%);
     padding: 5rem 0;
@@ -326,7 +357,7 @@ footer p {
     border: none;
     border-radius: 15px;
     box-shadow: 0 10px 40px rgba(30, 77, 145, 0.2);
-    z-index: 1000;
+    z-index: 1200;
     min-width: 320px;
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
@@ -873,15 +904,65 @@ footer p {
         font-size: 1.5rem;
     }
 
+    .hamburger-menu {
+        display: flex;
+    }
+
     nav ul {
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 0.5rem;
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 280px;
+        height: 100vh;
+        background: var(--primary-blue);
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 5rem 1.5rem;
+        gap: 1rem;
+        transition: right 0.3s ease;
+        z-index: 1100;
+    }
+
+    nav ul.active {
+        right: 0;
+    }
+
+    nav ul li {
+        width: 100%;
     }
 
     nav ul li a {
-        padding: 0.5rem 1rem;
-        font-size: 0.9rem;
+        width: 100%;
+        padding: 1rem;
+        font-size: 1rem;
+    }
+
+    .close-btn {
+        align-self: flex-end;
+        font-size: 1.5rem;
+        color: white;
+        cursor: pointer;
+        margin-bottom: 1rem;
+    }
+
+    .menu-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.4);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+        z-index: 1000;
+    }
+
+    .menu-overlay.active {
+        opacity: 1;
+        pointer-events: auto;
+        right: 280px;
+    }
+
+    body.menu-open {
+        overflow: hidden;
     }
 
     .nav-button {

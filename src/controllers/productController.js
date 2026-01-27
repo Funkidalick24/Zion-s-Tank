@@ -221,7 +221,97 @@ async function getProductById(req, res) {
   }
 }
 
+// Render marketplace page
+async function renderMarketplace(req, res) {
+  try {
+    const {
+      q,
+      category,
+      price,
+      sort,
+      page = '1',
+      limit = '20'
+    } = req.query;
+
+    const pageNum = Math.max(1, parseInt(page, 10) || 1);
+    const perPage = Math.min(100, Math.max(1, parseInt(limit, 10) || 20));
+    const offset = (pageNum - 1) * perPage;
+
+    const where = { isActive: true };
+
+    if (q) {
+      where[Op.or] = [
+        { name: { [Op.iLike]: `%${q}%` } },
+        { description: { [Op.iLike]: `%${q}%` } }
+      ];
+    }
+
+    if (category) {
+      // Map frontend categories to database
+      const categoryMapping = {
+        'technology': 1, // Assuming IDs, but better to query by name
+        'equipment': 2,
+        'professional': 3,
+        'office': 4,
+        'retail': 5,
+        'other': 6
+      };
+      if (categoryMapping[category]) {
+        where.categoryId = categoryMapping[category];
+      }
+    }
+
+    if (price) {
+      const [min, max] = price.split('-');
+      if (min) where.price = { ...where.price, [Op.gte]: Number(min) };
+      if (max) where.price = { ...where.price, [Op.lte]: Number(max) };
+    }
+
+    const include = [
+      {
+        model: User,
+        as: 'seller',
+        include: [{ model: Denomination, as: 'denomination' }]
+      },
+      { model: Category, as: 'category' }
+    ];
+
+    const { count, rows: products } = await Product.findAndCountAll({
+      where,
+      include,
+      limit: perPage,
+      offset,
+      order: buildSort(sort || 'newest')
+    });
+
+    const categories = await Category.findAll({ order: [['name', 'ASC']] });
+
+    return res.render('layout', {
+      body: 'marketplace',
+      title: 'Marketplace',
+      user: req.user,
+      products,
+      categories,
+      pagination: {
+        currentPage: pageNum,
+        totalPages: Math.ceil(count / perPage),
+        total: count
+      },
+      filters: { q, category, price, sort }
+    });
+  } catch (err) {
+    console.error('renderMarketplace error:', err);
+    return res.status(500).render('layout', {
+      body: 'error',
+      title: 'Error',
+      user: req.user,
+      message: 'Error loading marketplace'
+    });
+  }
+}
+
 module.exports = {
   listProducts,
-  getProductById
+  getProductById,
+  renderMarketplace
 };

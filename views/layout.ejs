@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary Meta Tags -->
+    <title><%= title || "Zion's Tank - Business Directory & Marketplace" %></title>
+    <meta name="title" content="<%= title || "Zion's Tank - Business Directory & Marketplace" %>">
+    <meta name="description" content="Connect with verified members, discover trusted partners, and explore products in our exclusive marketplace. Join our community in building stronger connections.">
+    <meta name="keywords" content="zion's tank, business directory, marketplace, networking, business partnerships, economic development, verified businesses">
+    <meta name="author" content="Zion's Tank">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://zionstank.org/">
+    <meta property="og:title" content="<%= title || "Zion's Tank - Business Directory & Marketplace" %>">
+    <meta property="og:description" content="Connect with verified members, discover trusted partners, and explore products in our exclusive marketplace.">
+    <meta property="og:image" content="https://zionstank.org/images/og-image.jpg">
+    <meta property="og:site_name" content="Zion's Tank">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://zionstank.org/">
+    <meta property="twitter:title" content="<%= title || "Zion's Tank - Business Directory & Marketplace" %>">
+    <meta property="twitter:description" content="Connect with verified members, discover trusted partners, and explore products in our exclusive marketplace.">
+    <meta property="twitter:image" content="https://zionstank.org/images/twitter-image.jpg">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
+    <!-- DNS prefetch -->
+    <link rel="dns-prefetch" href="//www.google-analytics.com">
+    <link rel="dns-prefetch" href="//www.googletagmanager.com">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Zion's Tank",
+        "url": "https://zionstank.org",
+        "logo": "https://zionstank.org/images/logo.png",
+        "description": "A trusted business directory and marketplace connecting verified members for growth and partnerships.",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "123 Business District",
+            "addressLocality": "Business City",
+            "addressRegion": "State",
+            "postalCode": "12345",
+            "addressCountry": "US"
+        },
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+1-555-123-4567",
+            "contactType": "customer service",
+            "availableLanguage": "English"
+        },
+        "sameAs": [
+            "https://www.facebook.com/zionstank",
+            "https://www.twitter.com/zionstank",
+            "https://www.linkedin.com/company/zionstank"
+        ],
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.8",
+            "reviewCount": "127"
+        }
+    }
+    </script>
+
+    <!-- Web App Manifest for PWA -->
+    <link rel="manifest" href="/manifest.json">
+
+    <!-- Theme color for mobile browsers -->
+    <meta name="theme-color" content="#003366">
+    <meta name="msapplication-TileColor" content="#003366">
+</head>
+<body>
+    <%- include('partials/header') %>
+
+    <main>
+        <%- include(body) %>
+    </main>
+
+    <%- include('partials/footer') %>
+
+    <!-- Messages Popover -->
+    <div id="messages-popover" class="popover">
+        <div class="popover-content">
+            <h3>Your Messages</h3>
+            <div id="messages-list">
+                <!-- Messages will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Message Thread Modal -->
+    <div id="message-modal" class="auth-modal" style="display: none;">
+        <div class="auth-modal-content" style="max-width: 600px;">
+            <button class="auth-modal-close" onclick="closeMessageModal()">&times;</button>
+            <div id="message-thread-content">
+                <!-- Message thread will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Account Popover -->
+    <div id="account-popover" class="popover">
+        <div class="popover-content">
+            <h3>Account</h3>
+            <button id="login-btn" class="cta-button">Login</button>
+            <button id="register-btn" class="cta-button">Register</button>
+        </div>
+    </div>
+
+    <%- include('partials/auth-modal') %>
+
+    <div class="menu-overlay"></div>
+    <script src="js/app.js"></script>
+</body>
+</html>

@@ -30,6 +30,39 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    // Hamburger menu functionality
+    const hamburgerMenu = document.getElementById('hamburger-menu');
+    const navMenu = document.querySelector('nav ul');
+    const overlay = document.querySelector('.menu-overlay');
+
+    if (hamburgerMenu && navMenu && overlay) {
+        hamburgerMenu.addEventListener('click', (e) => {
+            e.stopPropagation();
+            hamburgerMenu.classList.toggle('active');
+            navMenu.classList.toggle('active');
+            overlay.classList.toggle('active');
+            document.body.classList.toggle('menu-open');
+        });
+
+        overlay.addEventListener('click', () => {
+            hamburgerMenu.classList.remove('active');
+            navMenu.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.classList.remove('menu-open');
+        });
+
+        const closeBtn = document.querySelector('.close-btn');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                hamburgerMenu.classList.remove('active');
+                navMenu.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.classList.remove('menu-open');
+            });
+        }
+    }
+
+
     // Handle CTA buttons
     const ctaButtons = document.querySelectorAll('.cta-button');
     ctaButtons.forEach(button => {
@@ -1058,7 +1091,7 @@ function updateAuthUI() {
         });
 
         // Update account button icon
-        accountBtn.innerHTML = '<i class="fas fa-user-circle"></i>';
+        accountBtn.innerHTML = '<i class="fas fa-user-circle"></i> Account';
 
         // Update popover content for logged-in user
         let adminButton = '';
@@ -1102,7 +1135,7 @@ function updateAuthUI() {
         });
 
         // Update account button icon
-        accountBtn.innerHTML = '<i class="fas fa-user"></i>';
+        accountBtn.innerHTML = '<i class="fas fa-user"></i> Login';
 
         // Reset to login/register buttons
         accountPopover.innerHTML = `

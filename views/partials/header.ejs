@@ -1,0 +1,27 @@
+<header>
+    <div class="container">
+        <h1>Zion's Tank</h1>
+        <button id="hamburger-menu" class="hamburger-menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <nav>
+            <ul>
+                <li class="close-btn">✕</li>
+                <li><a href="/">Home</a></li>
+                <li><a href="/directory">Directory</a></li>
+                <li><a href="/marketplace">Marketplace</a></li>
+                <li><a href="/events">Events</a></li>
+                <li><a href="/contact">Contact</a></li>
+                <% if (user) { %>
+                <li><a href="/profile">Profile</a></li>
+                <li><button id="messages-btn" class="nav-button"><i class="fas fa-envelope"></i> Messages</button></li>
+                <li><button id="account-btn" class="nav-button"><i class="fas fa-sign-out-alt"></i> Logout</button></li>
+                <% } else { %>
+                <li><button id="account-btn" class="nav-button"><i class="fas fa-user"></i> Login</button></li>
+                <% } %>
+            </ul>
+        </nav>
+    </div>
+</header>
