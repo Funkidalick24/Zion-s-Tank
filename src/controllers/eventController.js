@@ -393,7 +393,7 @@ async function getMyRsvps(req, res) {
 }
 
 // Render events page
-async function renderEvents(req, res) {
+async function renderEvents(req, res, next) {
   try {
     const {
       q,
@@ -462,12 +462,7 @@ async function renderEvents(req, res) {
     });
   } catch (err) {
     console.error('renderEvents error:', err);
-    return res.status(500).render('layout', {
-      body: 'error',
-      title: 'Error',
-      user: req.user,
-      message: 'Error loading events'
-    });
+    return next(err);
   }
 }
 

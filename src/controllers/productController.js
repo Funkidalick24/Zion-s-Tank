@@ -222,7 +222,7 @@ async function getProductById(req, res) {
 }
 
 // Render marketplace page
-async function renderMarketplace(req, res) {
+async function renderMarketplace(req, res, next) {
   try {
     const {
       q,
@@ -301,12 +301,7 @@ async function renderMarketplace(req, res) {
     });
   } catch (err) {
     console.error('renderMarketplace error:', err);
-    return res.status(500).render('layout', {
-      body: 'error',
-      title: 'Error',
-      user: req.user,
-      message: 'Error loading marketplace'
-    });
+    return next(err);
   }
 }
 

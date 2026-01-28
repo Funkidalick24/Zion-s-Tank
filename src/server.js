@@ -55,33 +55,38 @@ app.get('/', optionalAuthenticate, async (req, res) => {
         where: { isActive: true, isVerified: true },
         limit: 6,
         order: [['trustScore', 'DESC']],
-        attributes: ['id', 'businessName', 'businessDescription', 'profileImageUrl', 'trustScore']
+        attributes: ['id', 'businessName', 'businessDescription', 'profileImageUrl', 'trustScore'],
+        raw: true
       }),
       Event.findAll({
         where: { eventDate: { [Op.gte]: new Date() } },
         limit: 3,
         order: [['eventDate', 'ASC']],
-        attributes: ['id', 'title', 'description', 'eventDate', 'location']
+        attributes: ['id', 'title', 'description', 'eventDate', 'location'],
+        raw: true
       }),
       Product.findAll({
         where: { isActive: true },
         limit: 6,
         order: [['createdAt', 'DESC']],
-        attributes: ['id', 'name', 'description', 'price', 'imageUrl']
+        attributes: ['id', 'name', 'description', 'price', 'imageUrl'],
+        raw: true
       })
     ]);
 
     return res.render('layout', {
       body: 'index',
       title: 'Home',
-      user: req.user,
+      user: req.user ? req.user.toJSON() : null,
       featuredUsers,
       upcomingEvents,
       featuredProducts
     });
   } catch (err) {
     console.error('Home page error:', err);
-    return res.render('layout', { body: 'index', title: 'Home', user: req.user, featuredUsers: [], upcomingEvents: [], featuredProducts: [] });
+    if (!res.headersSent) {
+      return res.render('layout', { body: 'index', title: 'Home', user: req.user ? req.user.toJSON() : null, featuredUsers: [], upcomingEvents: [], featuredProducts: [] });
+    }
   }
 });
 app.get('/directory', optionalAuthenticate, renderDirectory);

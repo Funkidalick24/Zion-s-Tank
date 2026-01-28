@@ -1,38 +1,91 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Events - Zion's Tank</title>
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-</head>
-<body>
-    <header>
-        <div class="container">
-            <h1><a href="index.html" style="color: #FFFFFF; text-decoration: none;">Zion's Tank</a></h1>
-            <button id="hamburger-menu" class="hamburger-menu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-            <nav>
-                <ul>
-                    <li class="close-btn">✕</li>
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="directory.html">Directory</a></li>
-                    <li><a href="marketplace.html">Marketplace</a></li>
-                    <li><a href="events.html">Events</a></li>
-                    <li><a href="contact.html">Contact</a></li>
-                    <li class="nav-item-auth" style="display: none;"><a href="profile.html">Profile</a></li>
-                    <li class="nav-item-auth" style="display: none;"><button id="messages-btn" class="nav-button"><i class="fas fa-envelope"></i> Messages</button></li>
-                    <li><button id="account-btn" class="nav-button"><i class="fas fa-user"></i></button></li>
-                </ul>
-            </nav>
+<section class="hero">
+    <div class="container">
+        <h2>Zion's Tank Events & Networking</h2>
+        <p>Connect with fellow business leaders through exclusive networking events, workshops, and seminars designed to foster collaboration and growth.</p>
+        <div style="display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; justify-content: center;">
+            <button id="create-event-btn" class="cta-button">Create Event</button>
+            <button id="my-events-btn" class="cta-button" style="background: transparent; border: 2px solid #D4AF37; color: #003366;">My Events</button>
         </div>
-    </header>
+    </div>
+</section>
 
-    <main>
+<section class="section">
+    <div class="container">
+        <!-- View Toggle Buttons -->
+        <div style="display: flex; justify-content: center; margin-bottom: 2rem;">
+            <div style="background: white; border-radius: 25px; padding: 0.25rem; box-shadow: 0 2px 10px rgba(0,51,102,0.1);">
+                <button id="list-view-btn-1" class="view-toggle-btn active" style="background: #D4AF37; color: #003366; border: none; padding: 0.75rem 1.5rem; border-radius: 20px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+                    <i class="fas fa-list"></i> List View
+                </button>
+                <button id="calendar-view-btn-1" class="view-toggle-btn" style="background: transparent; color: #6C757D; border: none; padding: 0.75rem 1.5rem; border-radius: 20px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+                    <i class="fas fa-calendar-alt"></i> Calendar View
+                </button>
+            </div>
+        </div>
+
+        <!-- Search and Filter Bar -->
+        <div style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,51,102,0.1); margin-bottom: 3rem;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; align-items: end;">
+                <div>
+                    <label for="search-input" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #003366;">Search Events</label>
+                    <input type="text" id="search-input" placeholder="Search events..." style="width: 100%; padding: 0.8rem; border: 2px solid #E6F3FF; border-radius: 6px; font-size: 1rem;">
+                </div>
+                <div>
+                    <label for="event-type-filter" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #003366;">Event Type</label>
+                    <select id="event-type-filter" style="width: 100%; padding: 0.8rem; border: 2px solid #E6F3FF; border-radius: 6px; font-size: 1rem;">
+                        <option value="">All Types</option>
+                        <option value="networking">Networking</option>
+                        <option value="workshop">Workshop</option>
+                        <option value="seminar">Seminar</option>
+                        <option value="social">Social</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="date-filter" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #003366;">Date Range</label>
+                    <select id="date-filter" style="width: 100%; padding: 0.8rem; border: 2px solid #E6F3FF; border-radius: 6px; font-size: 1rem;">
+                        <option value="">All Dates</option>
+                        <option value="today">Today</option>
+                        <option value="week">This Week</option>
+                        <option value="month">This Month</option>
+                        <option value="upcoming">Upcoming</option>
+                    </select>
+                </div>
+                <div>
+                    <button id="search-btn" class="cta-button" style="width: 100%;">Search</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Events View Toggle -->
+        <div style="display: flex; justify-content: center; margin-bottom: 2rem;">
+            <div style="display: flex; background: #E6F3FF; border-radius: 25px; padding: 0.25rem;">
+                <button id="list-view-btn" class="view-toggle active" onclick="setView('list')">
+                    <i class="fas fa-list"></i> List
+                </button>
+                <button id="calendar-view-btn" class="view-toggle" onclick="setView('calendar')">
+                    <i class="fas fa-calendar-alt"></i> Calendar
+                </button>
+            </div>
+        </div>
+
+        <!-- Events Container -->
+        <div id="events-view" class="view-container">
+            <h3 style="text-align: center; margin-bottom: 2rem; color: #003366;">Upcoming Events</h3>
+            <div id="events-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2rem;">
+                <!-- Events will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Calendar View Container -->
+        <div id="calendar-view" class="view-container" style="display: none;">
+            <div id="calendar-container">
+                <!-- Calendar will be loaded here -->
+            </div>
+        </div>
+
+    </div>
+</section>
         <section class="hero">
             <div class="container">
                 <h2>Zion's Tank Events & Networking</h2>
@@ -121,277 +174,3 @@
 
             </div>
         </section>
-    </main>
-
-    <!-- Event Details Modal -->
-    <div id="event-modal" class="auth-modal" style="display: none;">
-        <div class="auth-modal-content" style="max-width: 600px;">
-            <button class="auth-modal-close" onclick="closeEventModal()">&times;</button>
-            <div id="event-details">
-                <!-- Event details will be loaded here -->
-            </div>
-        </div>
-    </div>
-
-    <!-- Create Event Modal -->
-    <div id="create-event-modal" class="auth-modal" style="display: none;">
-        <div class="auth-modal-content" style="max-width: 600px;">
-            <button class="auth-modal-close" onclick="closeCreateEventModal()">&times;</button>
-            <form id="create-event-form" method="post">
-                <h2>Create New Event</h2>
-                <div class="form-group">
-                    <label for="event-title">Event Title *</label>
-                    <input type="text" id="event-title" name="title" required>
-                </div>
-                <div class="form-group">
-                    <label for="event-description">Description *</label>
-                    <textarea id="event-description" name="description" rows="4" required></textarea>
-                </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                    <div class="form-group">
-                        <label for="event-date">Event Date *</label>
-                        <input type="date" id="event-date" name="eventDate" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="event-type">Event Type</label>
-                        <select id="event-type" name="eventType">
-                            <option value="networking">Networking</option>
-                            <option value="workshop">Workshop</option>
-                            <option value="seminar">Seminar</option>
-                            <option value="social">Social</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </div>
-                </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                    <div class="form-group">
-                        <label for="start-time">Start Time *</label>
-                        <input type="time" id="start-time" name="startTime" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="end-time">End Time *</label>
-                        <input type="time" id="end-time" name="endTime" required>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="event-location">Location</label>
-                    <input type="text" id="event-location" name="location" placeholder="Physical location or 'Virtual'">
-                </div>
-                <div class="form-group">
-                    <label for="virtual-link">Virtual Meeting Link</label>
-                    <input type="url" id="virtual-link" name="virtualLink" placeholder="Zoom, Teams, etc.">
-                </div>
-                <div class="form-group">
-                    <label for="max-attendees">Maximum Attendees (optional)</label>
-                    <input type="number" id="max-attendees" name="maxAttendees" min="1">
-                </div>
-                <button type="submit" class="auth-button">Create Event</button>
-                <div id="create-event-message"></div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Edit Event Modal -->
-    <div id="edit-event-modal" class="auth-modal" style="display: none;">
-        <div class="auth-modal-content" style="max-width: 600px;">
-            <button class="auth-modal-close" onclick="closeEditEventModal()">&times;</button>
-            <form id="edit-event-form" method="post">
-                <h2>Edit Event</h2>
-                <input type="hidden" id="edit-event-id" name="id">
-                <div class="form-group">
-                    <label for="edit-event-title">Event Title *</label>
-                    <input type="text" id="edit-event-title" name="title" required>
-                </div>
-                <div class="form-group">
-                    <label for="edit-event-description">Description *</label>
-                    <textarea id="edit-event-description" name="description" rows="4" required></textarea>
-                </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                    <div class="form-group">
-                        <label for="edit-event-date">Event Date *</label>
-                        <input type="date" id="edit-event-date" name="eventDate" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="edit-event-type">Event Type</label>
-                        <select id="edit-event-type" name="eventType">
-                            <option value="networking">Networking</option>
-                            <option value="workshop">Workshop</option>
-                            <option value="seminar">Seminar</option>
-                            <option value="social">Social</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </div>
-                </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                    <div class="form-group">
-                        <label for="edit-start-time">Start Time *</label>
-                        <input type="time" id="edit-start-time" name="startTime" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="edit-end-time">End Time *</label>
-                        <input type="time" id="edit-end-time" name="endTime" required>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="edit-event-location">Location</label>
-                    <input type="text" id="edit-event-location" name="location" placeholder="Physical location or 'Virtual'">
-                </div>
-                <div class="form-group">
-                    <label for="edit-virtual-link">Virtual Meeting Link</label>
-                    <input type="url" id="edit-virtual-link" name="virtualLink" placeholder="Zoom, Teams, etc.">
-                </div>
-                <div class="form-group">
-                    <label for="edit-max-attendees">Maximum Attendees (optional)</label>
-                    <input type="number" id="edit-max-attendees" name="maxAttendees" min="1">
-                </div>
-                <button type="submit" class="auth-button">Update Event</button>
-                <div id="edit-event-message"></div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Messages Popover -->
-    <div id="messages-popover" class="popover">
-        <div class="popover-content">
-            <h3>Your Messages</h3>
-            <div id="messages-list">
-                <!-- Messages will be loaded here -->
-            </div>
-        </div>
-    </div>
-
-    <!-- Account Popover -->
-    <div id="account-popover" class="popover">
-        <div class="popover-content">
-            <h3>Account</h3>
-            <button id="login-btn" class="cta-button">Login</button>
-            <button id="register-btn" class="cta-button">Register</button>
-        </div>
-    </div>
-
-    <!-- Auth Modals -->
-    <div id="login-modal" class="auth-modal">
-        <div class="auth-modal-content">
-            <button class="auth-modal-close" id="login-close">&times;</button>
-            <form class="auth-form" id="login-form">
-                <h2>Login to Your Account</h2>
-                <div class="form-group">
-                    <label for="login-email">Email</label>
-                    <input type="email" id="login-email" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="login-password">Password</label>
-                    <input type="password" id="login-password" name="password" required>
-                </div>
-                <button type="submit" class="auth-button" id="login-submit">Login</button>
-                <div class="auth-link">
-                    <a href="#" id="show-register">Don't have an account? Register here</a>
-                </div>
-                <div id="login-message"></div>
-            </form>
-        </div>
-    </div>
-
-    <div id="register-modal" class="auth-modal">
-        <div class="auth-modal-content">
-            <button class="auth-modal-close" id="register-close">&times;</button>
-            <form class="auth-form" id="register-form">
-                <h2>Create Your Account</h2>
-                <div class="form-group">
-                    <label for="register-firstname">First Name</label>
-                    <input type="text" id="register-firstname" name="firstName" required>
-                </div>
-                <div class="form-group">
-                    <label for="register-lastname">Last Name</label>
-                    <input type="text" id="register-lastname" name="lastName" required>
-                </div>
-                <div class="form-group">
-                    <label for="register-email">Email</label>
-                    <input type="email" id="register-email" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="register-password">Password</label>
-                    <input type="password" id="register-password" name="password" required minlength="6">
-                </div>
-                <button type="submit" class="auth-button" id="register-submit">Register</button>
-                <div class="auth-link">
-                    <a href="#" id="show-login">Already have an account? Login here</a>
-                </div>
-                <div id="register-message"></div>
-            </form>
-        </div>
-    </div>
-
-    <footer>
-        <div class="container">
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem;">
-                <div>
-                    <h4 style="color: white; margin-bottom: 0.8rem; font-size: 1rem;">Quick Links</h4>
-                    <ul style="list-style: none; padding: 0;">
-                        <li style="margin-bottom: 0.3rem;"><a href="index.html" style="color: #E6F3FF; text-decoration: none; font-size: 0.85rem;">Home</a></li>
-                        <li style="margin-bottom: 0.3rem;"><a href="directory.html" style="color: #E6F3FF; text-decoration: none; font-size: 0.85rem;">Directory</a></li>
-                        <li style="margin-bottom: 0.3rem;"><a href="marketplace.html" style="color: #E6F3FF; text-decoration: none; font-size: 0.85rem;">Marketplace</a></li>
-                        <li style="margin-bottom: 0.3rem;"><a href="events.html" style="color: #E6F3FF; text-decoration: none; font-size: 0.85rem;">Events</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 style="color: white; margin-bottom: 0.8rem; font-size: 1rem;">Events</h4>
-                    <ul style="list-style: none; padding: 0;">
-                        <li style="margin-bottom: 0.3rem;"><a href="#" style="color: #E6F3FF; text-decoration: none; font-size: 0.85rem;">Create Event</a></li>
-                        <li style="margin-bottom: 0.3rem;"><a href="#" style="color: #E6F3FF; text-decoration: none; font-size: 0.85rem;">Event Calendar</a></li>
-                        <li style="margin-bottom: 0.3rem;"><a href="#" style="color: #E6F3FF; text-decoration: none; font-size: 0.85rem;">Networking Tips</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 style="color: white; margin-bottom: 0.8rem; font-size: 1rem;">Contact</h4>
-                    <div style="color: #E6F3FF; line-height: 1.4; font-size: 0.85rem;">
-                        <div style="margin-bottom: 0.3rem;"><i class="fas fa-phone"></i> (555) 123-4567</div>
-                        <div style="margin-bottom: 0.3rem;"><i class="fas fa-envelope"></i> info@zionstank.org</div>
-                    </div>
-                </div>
-                <div>
-                    <h4 style="color: white; margin-bottom: 0.8rem; font-size: 1rem;">Follow Us</h4>
-                    <div style="display: flex; gap: 0.8rem;">
-                        <a href="#" style="color: #D4AF37; font-size: 1.2rem;"><i class="fab fa-facebook"></i></a>
-                        <a href="#" style="color: #D4AF37; font-size: 1.2rem;"><i class="fab fa-twitter"></i></a>
-                        <a href="#" style="color: #D4AF37; font-size: 1.2rem;"><i class="fab fa-linkedin"></i></a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="trust-indicators">
-                <div class="trust-indicator">
-                    <i class="fas fa-shield-alt"></i>
-                    <span>Verified Members</span>
-                </div>
-                <div class="trust-indicator">
-                    <i class="fas fa-handshake"></i>
-                    <span>Trusted Partnerships</span>
-                </div>
-                <div class="trust-indicator">
-                    <i class="fas fa-award"></i>
-                    <span>Quality Assurance</span>
-                </div>
-                <div class="trust-indicator">
-                    <i class="fas fa-users"></i>
-                    <span>Community Driven</span>
-                </div>
-            </div>
-
-            <div style="text-align: center; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1);">
-                <p style="margin: 0 0 0.5rem 0; color: #E6F3FF; font-size: 0.8rem;">&copy; 2023 Zion's Tank</p>
-                <div style="font-size: 0.75rem; color: #6C757D;">
-                    <a href="#" style="color: #6C757D; text-decoration: none; margin: 0 0.8rem;">Privacy</a>
-                    <a href="#" style="color: #6C757D; text-decoration: none; margin: 0 0.8rem;">Terms</a>
-                    <a href="#" style="color: #6C757D; text-decoration: none; margin: 0 0.8rem;">Accessibility</a>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <div class="menu-overlay"></div>
-
-    <script src="js/app.js"></script>
-    <script src="js/events.js"></script>
-</body>
-</html>

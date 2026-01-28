@@ -121,7 +121,7 @@
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                     <div>
                         <i class="fas fa-calendar" style="color: #D4AF37; margin-right: 0.5rem;"></i>
-                        <%= event.eventDate ? new Date(event.eventDate).toLocaleDateString() : 'TBD' %>
+                        <%= event.eventDate ? (function() { try { return new Date(event.eventDate).toLocaleDateString(); } catch(e) { return 'TBD'; } })() : 'TBD' %>
                     </div>
                     <% if (event.location) { %>
                     <div>
