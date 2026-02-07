@@ -1,10 +1,5 @@
-const CACHE_NAME = 'zionstank-v1';
+const CACHE_NAME = 'zionstank-v2';
 const urlsToCache = [
-  '/',
-  '/directory',
-  '/marketplace',
-  '/events',
-  '/contact',
   '/offline',
   '/css/styles.css',
   '/js/app.js',
@@ -27,17 +22,31 @@ self.addEventListener('install', event => {
 
 // Fetch event - serve from cache when offline
 self.addEventListener('fetch', event => {
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request)
+        .then(response => {
+          if (response && response.ok) {
+            const responseClone = response.clone();
+            caches.open(CACHE_NAME).then(cache => {
+              cache.put(event.request, responseClone);
+            });
+          }
+          return response;
+        })
+        .catch(() => {
+          return caches.match(event.request).then(cached => {
+            return cached || caches.match('/offline');
+          });
+        })
+    );
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request)
       .then(response => {
-        // Return cached version or fetch from network
         return response || fetch(event.request);
-      })
-      .catch(() => {
-        // If both cache and network fail, show offline page
-        if (event.request.destination === 'document') {
-          return caches.match('/offline');
-        }
       })
   );
 });

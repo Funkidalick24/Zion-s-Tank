@@ -448,8 +448,7 @@ async function renderEvents(req, res, next) {
       ]
     });
 
-    return res.render('layout', {
-      body: 'events',
+    return res.render('events', {
       title: 'Events',
       user: req.user,
       events,

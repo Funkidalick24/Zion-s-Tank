@@ -4,6 +4,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const dotenv = require('dotenv');
 const path = require('path');
+const expressLayouts = require('express-ejs-layouts');
 
 // Load environment variables
 dotenv.config();
@@ -21,6 +22,8 @@ const PORT = process.env.PORT || 3000;
 // Set view engine
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, '..', 'views'));
+app.use(expressLayouts);
+app.set('layout', 'layout');
 
 // Middleware
 app.use(helmet({
@@ -39,9 +42,6 @@ app.use(helmet({
 app.use(cors()); // Cross-origin resource sharing
 app.use(express.json({ limit: '10mb' })); // Parse JSON bodies
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
-
-// Serve static files from public directory
-app.use(express.static('public'));
 
 // Page routes
 app.get('/', optionalAuthenticate, async (req, res) => {
@@ -74,8 +74,7 @@ app.get('/', optionalAuthenticate, async (req, res) => {
       })
     ]);
 
-    return res.render('layout', {
-      body: 'index',
+    return res.render('index', {
       title: 'Home',
       user: req.user ? req.user.toJSON() : null,
       featuredUsers,
@@ -85,22 +84,25 @@ app.get('/', optionalAuthenticate, async (req, res) => {
   } catch (err) {
     console.error('Home page error:', err);
     if (!res.headersSent) {
-      return res.render('layout', { body: 'index', title: 'Home', user: req.user ? req.user.toJSON() : null, featuredUsers: [], upcomingEvents: [], featuredProducts: [] });
+      return res.render('index', { title: 'Home', user: req.user ? req.user.toJSON() : null, featuredUsers: [], upcomingEvents: [], featuredProducts: [] });
     }
   }
 });
 app.get('/directory', optionalAuthenticate, renderDirectory);
 app.get('/marketplace', optionalAuthenticate, renderMarketplace);
 app.get('/events', optionalAuthenticate, renderEvents);
-app.get('/contact', optionalAuthenticate, (req, res) => res.render('layout', { body: 'contact', title: 'Contact Us', user: req.user }));
-app.get('/login', optionalAuthenticate, (req, res) => res.render('layout', { body: 'login', title: 'Login', user: req.user }));
-app.get('/register-step1', optionalAuthenticate, (req, res) => res.render('layout', { body: 'register-step1', title: 'Register - Step 1', user: req.user }));
-app.get('/register-step2', optionalAuthenticate, (req, res) => res.render('layout', { body: 'register-step2', title: 'Register - Step 2', user: req.user }));
-app.get('/register-step3', optionalAuthenticate, (req, res) => res.render('layout', { body: 'register-step3', title: 'Register - Step 3', user: req.user }));
-app.get('/register-step4', optionalAuthenticate, (req, res) => res.render('layout', { body: 'register-step4', title: 'Register - Step 4', user: req.user }));
-app.get('/profile', optionalAuthenticate, (req, res) => res.render('layout', { body: 'profile', title: 'Profile', user: req.user }));
-app.get('/admin', optionalAuthenticate, (req, res) => res.render('layout', { body: 'admin', title: 'Admin', user: req.user }));
+app.get('/contact', optionalAuthenticate, (req, res) => res.render('contact', { title: 'Contact Us', user: req.user }));
+app.get('/login', optionalAuthenticate, (req, res) => res.render('login', { title: 'Login', user: req.user }));
+app.get('/register-step1', optionalAuthenticate, (req, res) => res.render('register-step1', { title: 'Register - Step 1', user: req.user }));
+app.get('/register-step2', optionalAuthenticate, (req, res) => res.render('register-step2', { title: 'Register - Step 2', user: req.user }));
+app.get('/register-step3', optionalAuthenticate, (req, res) => res.render('register-step3', { title: 'Register - Step 3', user: req.user }));
+app.get('/register-step4', optionalAuthenticate, (req, res) => res.render('register-step4', { title: 'Register - Step 4', user: req.user }));
+app.get('/profile', optionalAuthenticate, (req, res) => res.render('profile', { title: 'Profile', user: req.user }));
+app.get('/admin', optionalAuthenticate, (req, res) => res.render('admin', { title: 'Admin', user: req.user }));
 app.get('/offline', (req, res) => res.sendFile(path.join(__dirname, '..', 'public', 'offline.html')));
+
+// Serve static files from public directory
+app.use(express.static(path.join(__dirname, '..', 'public')));
 
 // Initialize database
 const { initializeDatabase } = require('./database/init');
@@ -110,10 +112,20 @@ app.use('/api', routes);
 
 // 404 handler - must come before error handling middleware
 app.use('*', (req, res) => {
-  res.status(404).json({
-    success: false,
-    message: 'Route not found'
-  });
+  // Check if request expects JSON (API routes)
+  if (req.headers.accept && req.headers.accept.includes('application/json')) {
+    res.status(404).json({
+      success: false,
+      message: 'Route not found'
+    });
+  } else {
+    // For web page requests, render a 404 page or redirect to home
+    res.status(404).render('error', {
+      title: 'Page Not Found',
+      user: req.user,
+      message: 'The page you are looking for does not exist.'
+    });
+  }
 });
 
 // Error handling middleware - must come LAST

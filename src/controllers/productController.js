@@ -286,8 +286,7 @@ async function renderMarketplace(req, res, next) {
 
     const categories = await Category.findAll({ order: [['name', 'ASC']] });
 
-    return res.render('layout', {
-      body: 'marketplace',
+    return res.render('marketplace', {
       title: 'Marketplace',
       user: req.user,
       products,

@@ -274,8 +274,7 @@ async function renderDirectory(req, res) {
       attributes: ['id', 'name', 'description']
     });
 
-    return res.render('layout', {
-      body: 'directory',
+    return res.render('directory', {
       title: 'Directory',
       user: req.user,
       users: result.rows,
@@ -290,8 +289,7 @@ async function renderDirectory(req, res) {
   } catch (err) {
     console.error('renderDirectory error:', err);
     if (!res.headersSent) {
-      return res.status(500).render('layout', {
-        body: 'error',
+      return res.status(500).render('error', {
         title: 'Error',
         user: req.user,
         message: 'Error loading directory'
