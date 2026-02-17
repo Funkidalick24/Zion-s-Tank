@@ -947,12 +947,12 @@ function showLoginModal() {
         hideLoginModal();
 
         // Optional: redirect to profile page
-        if (window.location.pathname.includes('profile.html')) {
+        if (window.location.pathname.includes('/profile')) {
             // Already on profile page, just reload
             loadProfile();
         } else {
             // Redirect to profile page
-            window.location.href = 'profile.html';
+            window.location.href = '/profile';
         }
         return;
     }
@@ -1143,7 +1143,7 @@ function updateAuthUI() {
         let adminButton = '';
         if (currentUser.role === 'admin') {
             adminButton = `
-                <button class="cta-button" style="background: transparent; border: 2px solid #FF9800; color: #FF9800; margin-bottom: 0.5rem;" onclick="window.location.href='admin.html'">
+                <button class="cta-button" style="background: transparent; border: 2px solid #FF9800; color: #FF9800; margin-bottom: 0.5rem;" onclick="window.location.href='/admin'">
                     <i class="fas fa-cog"></i> Admin Dashboard
                 </button>
             `;
@@ -1157,10 +1157,10 @@ function updateAuthUI() {
                     <button class="logout-btn" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</button>
                 </div>
                 ${adminButton}
-                <button class="cta-button" onclick="window.location.href='events.html'">
+                <button class="cta-button" onclick="window.location.href='/events'">
                     <i class="fas fa-calendar-plus"></i> Create Event
                 </button>
-                <button class="cta-button" style="background: transparent; border: 2px solid #D4AF37; color: #003366;" onclick="window.location.href='profile.html'">
+                <button class="cta-button" style="background: transparent; border: 2px solid #D4AF37; color: #003366;" onclick="window.location.href='/profile'">
                     <i class="fas fa-user"></i> View Profile
                 </button>
                 <button class="cta-button" style="background: transparent; border: 2px solid #FF6B6B; color: #FF6B6B; margin-top: 0.5rem;" onclick="handleLogoutAll()">
@@ -1187,10 +1187,10 @@ function updateAuthUI() {
         accountPopover.innerHTML = `
             <div class="popover-content">
                 <h3>Member Access</h3>
-                <button class="cta-button" onclick="window.location.href='login.html'">
+                <button class="cta-button" onclick="window.location.href='/login'">
                     <i class="fas fa-sign-in-alt"></i> Login
                 </button>
-                <button class="cta-button" onclick="window.location.href='register-step1.html'">
+                <button class="cta-button" onclick="window.location.href='/register-step1'">
                     <i class="fas fa-user-plus"></i> Join Chamber
                 </button>
                 <div style="margin-top: 1rem; font-size: 0.9rem; color: #6C757D;">
@@ -1401,7 +1401,7 @@ function showVerificationPrompt() {
             <strong>Verification Required</strong><br>
             <span style="font-size: 0.9rem;">As a seller, you need to verify your identity to build trust with buyers.</span><br>
             <div style="margin-top: 1rem;">
-                <button onclick="window.location.href='profile.html'" style="
+                <button onclick="window.location.href='/profile'" style="
                     background: #D4AF37;
                     color: #003366;
                     border: none;

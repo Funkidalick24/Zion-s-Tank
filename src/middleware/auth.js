@@ -65,12 +65,17 @@ async function authenticate(req, res, next) {
     };
     next();
   } catch (error) {
-    console.error('Authentication error:', error);
-
     if (error.message === 'Token has expired') {
       return res.status(401).json({
         success: false,
         message: 'Token has expired'
+      });
+    }
+
+    if (error.message === 'Invalid token') {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid token'
       });
     }
 
@@ -81,6 +86,7 @@ async function authenticate(req, res, next) {
       });
     }
 
+    console.error('Authentication error:', error);
     res.status(401).json({
       success: false,
       message: 'Authentication failed'
@@ -162,9 +168,8 @@ async function optionalAuthenticate(req, res, next) {
     }
   } catch (_) {
     // Silently ignore invalid tokens for optional auth
-  } finally {
-    next();
   }
+  return next();
 }
 
 module.exports = {

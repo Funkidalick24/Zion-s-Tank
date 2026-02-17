@@ -1,28 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - Step 2 - Zion's Tank</title>
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-</head>
-<body>
-    <header>
-        <div class="container">
-            <h1>Zion's Tank</h1>
-            <nav>
-                <ul>
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="directory.html">Directory</a></li>
-                    <li><a href="marketplace.html">Marketplace</a></li>
-                    <li><a href="events.html">Events</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
 
-    <main>
         <section class="section">
             <div class="container">
                 <div class="registration-container">
@@ -76,20 +52,14 @@
                     </div>
 
                     <div class="registration-links">
-                        <p><a href="index.html">Back to Home</a></p>
+                        <p><a href="/">Back to Home</a></p>
                     </div>
                 </div>
             </div>
         </section>
-    </main>
+    
 
-    <footer>
-        <div class="container">
-            <div style="text-align: center; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1);">
-                <p style="margin: 0 0 0.5rem 0; color: #E6F3FF; font-size: 0.8rem;">&copy; 2023 Zion's Tank</p>
-            </div>
-        </div>
-    </footer>
+    
 
     <script>
         // Load existing data
@@ -98,7 +68,7 @@
 
             if (!registrationData.firstName) {
                 // No data, redirect to step 1
-                window.location.href = 'register-step1.html';
+                window.location.href = '/register-step1';
                 return;
             }
 
@@ -135,11 +105,11 @@
             sessionStorage.setItem('registrationData', JSON.stringify(registrationData));
 
             // Redirect to step 3
-            window.location.href = 'register-step3.html';
+            window.location.href = '/register-step3';
         });
 
         function goBack() {
-            window.location.href = 'register-step1.html';
+            window.location.href = '/register-step1';
         }
 
         function showMessage(elementId, message, type) {
@@ -149,5 +119,4 @@
             }
         }
     </script>
-</body>
-</html>
+
