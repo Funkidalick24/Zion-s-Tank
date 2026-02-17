@@ -101,6 +101,10 @@ nav ul li a:hover {
     transform: translateY(-1px);
 }
 
+.close-btn {
+    display: none;
+}
+
 .nav-button {
     background: none;
     border: 2px solid var(--accent-blue);
@@ -938,6 +942,7 @@ footer p {
     }
 
     .close-btn {
+        display: block;
         align-self: flex-end;
         font-size: 1.5rem;
         color: white;
