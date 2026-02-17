@@ -69,17 +69,22 @@ app.get('/', optionalAuthenticate, async (req, res) => {
         where: { isActive: true },
         limit: 6,
         order: [['createdAt', 'DESC']],
-        attributes: ['id', 'name', 'description', 'price', 'imageUrl'],
+        attributes: ['id', 'name', 'description', 'price', 'imageUrls'],
         raw: true
       })
     ]);
+
+    const normalizedProducts = featuredProducts.map(product => ({
+      ...product,
+      imageUrl: Array.isArray(product.imageUrls) ? product.imageUrls[0] : product.imageUrls
+    }));
 
     return res.render('index', {
       title: 'Home',
       user: req.user ? req.user.toJSON() : null,
       featuredUsers,
       upcomingEvents,
-      featuredProducts
+      featuredProducts: normalizedProducts
     });
   } catch (err) {
     console.error('Home page error:', err);
@@ -93,10 +98,13 @@ app.get('/marketplace', optionalAuthenticate, renderMarketplace);
 app.get('/events', optionalAuthenticate, renderEvents);
 app.get('/contact', optionalAuthenticate, (req, res) => res.render('contact', { title: 'Contact Us', user: req.user }));
 app.get('/login', optionalAuthenticate, (req, res) => res.render('login', { title: 'Login', user: req.user }));
+app.get('/signin', optionalAuthenticate, (req, res) => res.render('login', { title: 'Login', user: req.user }));
+app.get('/register', optionalAuthenticate, (req, res) => res.render('register-step1', { title: 'Register - Step 1', user: req.user }));
 app.get('/register-step1', optionalAuthenticate, (req, res) => res.render('register-step1', { title: 'Register - Step 1', user: req.user }));
 app.get('/register-step2', optionalAuthenticate, (req, res) => res.render('register-step2', { title: 'Register - Step 2', user: req.user }));
 app.get('/register-step3', optionalAuthenticate, (req, res) => res.render('register-step3', { title: 'Register - Step 3', user: req.user }));
 app.get('/register-step4', optionalAuthenticate, (req, res) => res.render('register-step4', { title: 'Register - Step 4', user: req.user }));
+app.get('/signup', optionalAuthenticate, (req, res) => res.render('register-step1', { title: 'Register - Step 1', user: req.user }));
 app.get('/profile', optionalAuthenticate, (req, res) => res.render('profile', { title: 'Profile', user: req.user }));
 app.get('/admin', optionalAuthenticate, (req, res) => res.render('admin', { title: 'Admin', user: req.user }));
 app.get('/offline', (req, res) => res.sendFile(path.join(__dirname, '..', 'public', 'offline.html')));

@@ -461,7 +461,19 @@ async function renderEvents(req, res, next) {
     });
   } catch (err) {
     console.error('renderEvents error:', err);
-    return next(err);
+    if (!res.headersSent) {
+      return res.status(200).render('events', {
+        title: 'Events',
+        user: req.user,
+        events: [],
+        pagination: {
+          currentPage: 1,
+          totalPages: 1,
+          total: 0
+        },
+        filters: { q: '', eventType: '', location: '', sort: 'newest' }
+      });
+    }
   }
 }
 

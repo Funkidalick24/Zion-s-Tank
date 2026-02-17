@@ -1,9 +1,26 @@
 // Admin dashboard functionality
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Initialize auth state from storage before role checks.
+    // app.js also does this, but admin.js can run its DOMContentLoaded handler first.
+    const storedToken = localStorage.getItem('authToken');
+    const storedUser = localStorage.getItem('currentUser');
+
+    if ((!authToken || !currentUser) && storedToken && storedUser) {
+        try {
+            authToken = storedToken;
+            currentUser = JSON.parse(storedUser);
+        } catch (_) {
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('currentUser');
+            authToken = null;
+            currentUser = null;
+        }
+    }
+
     // Check if user is admin
     if (!currentUser || currentUser.role !== 'admin') {
-        window.location.href = 'index.html';
+        window.location.href = '/';
         return;
     }
 

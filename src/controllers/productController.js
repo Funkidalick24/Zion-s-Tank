@@ -300,7 +300,20 @@ async function renderMarketplace(req, res, next) {
     });
   } catch (err) {
     console.error('renderMarketplace error:', err);
-    return next(err);
+    if (!res.headersSent) {
+      return res.status(200).render('marketplace', {
+        title: 'Marketplace',
+        user: req.user,
+        products: [],
+        categories: [],
+        pagination: {
+          currentPage: 1,
+          totalPages: 1,
+          total: 0
+        },
+        filters: { q: '', category: '', price: '', sort: 'newest' }
+      });
+    }
   }
 }
 

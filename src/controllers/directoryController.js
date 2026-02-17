@@ -289,10 +289,17 @@ async function renderDirectory(req, res) {
   } catch (err) {
     console.error('renderDirectory error:', err);
     if (!res.headersSent) {
-      return res.status(500).render('error', {
-        title: 'Error',
+      return res.status(200).render('directory', {
+        title: 'Directory',
         user: req.user,
-        message: 'Error loading directory'
+        users: [],
+        denominations: [],
+        pagination: {
+          currentPage: 1,
+          totalPages: 1,
+          total: 0
+        },
+        filters: { q: '', category: '', location: '', denomination: '', sort: 'newest' }
       });
     }
   }
