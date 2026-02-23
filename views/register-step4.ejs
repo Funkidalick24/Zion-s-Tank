@@ -72,8 +72,8 @@
             };
 
             reviewContent.innerHTML = `
-                <div style="display: grid; gap: 1rem;">
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="review-stack">
+                    <div class="review-two-col">
                         <div><strong>Name:</strong> ${data.firstName} ${data.lastName}</div>
                         <div><strong>Email:</strong> ${data.email}</div>
                         <div><strong>Phone:</strong> ${data.phoneNumber || 'Not provided'}</div>
@@ -84,11 +84,11 @@
                     ${data.businessDescription ? `<div><strong>Business Description:</strong> ${data.businessDescription}</div>` : ''}
                     ${data.address ? `<div><strong>Address:</strong> ${data.address}</div>` : ''}
 
-                    <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #E6F3FF;">
+                    <div class="review-divider">
                         <div><strong>Denomination:</strong> ${denominationName}</div>
-                        <div style="margin-top: 0.5rem;">
+                        <div class="review-agreements">
                             <strong>Agreements:</strong>
-                            <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+                            <ul class="review-list">
                                 <li>Terms of Service: ${data.agreeTerms ? '✓ Agreed' : '✗ Not agreed'}</li>
                                 <li>Marketing Communications: ${data.agreeMarketing ? '✓ Subscribed' : '✗ Not subscribed'}</li>
                             </ul>

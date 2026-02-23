@@ -2,9 +2,9 @@
     <div class="container">
         <h2>Empowering Business Through Trusted Connections</h2>
         <p>Zion's Tank is dedicated to fostering growth, development, and prosperity through verified partnerships, exclusive networking opportunities, and advocacy for businesses.</p>
-        <div style="display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; justify-content: center;">
+        <div class="hero-actions">
             <button class="cta-button" onclick="window.location.href='/register-step1'">Become a Member</button>
-            <button class="cta-button" style="background: transparent; border: 2px solid #D4AF37; color: #003366;" onclick="window.location.href='/login'">Member Login</button>
+            <button class="cta-button button-secondary" onclick="window.location.href='/login'">Member Login</button>
         </div>
     </div>
 </section>
@@ -12,20 +12,20 @@
 <section id="about" class="section">
     <div class="container">
         <h2>About Zion's Tank</h2>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 3rem;">
-            <div style="text-align: center;">
-                <i class="fas fa-bullseye" style="font-size: 3rem; color: #D4AF37; margin-bottom: 1rem;"></i>
-                <h3 style="color: #003366; margin-bottom: 1rem;">Our Mission</h3>
+        <div class="value-grid">
+            <div class="value-card">
+                <i class="fas fa-bullseye value-icon"></i>
+                <h3>Our Mission</h3>
                 <p>To promote and protect the interests of businesses, fostering growth through collaboration, innovation, and advocacy.</p>
             </div>
-            <div style="text-align: center;">
-                <i class="fas fa-eye" style="font-size: 3rem; color: #D4AF37; margin-bottom: 1rem;"></i>
-                <h3 style="color: #003366; margin-bottom: 1rem;">Our Vision</h3>
+            <div class="value-card">
+                <i class="fas fa-eye value-icon"></i>
+                <h3>Our Vision</h3>
                 <p>To be the leading voice for business, creating a thriving ecosystem where businesses prosper and communities flourish.</p>
             </div>
-            <div style="text-align: center;">
-                <i class="fas fa-handshake" style="font-size: 3rem; color: #D4AF37; margin-bottom: 1rem;"></i>
-                <h3 style="color: #003366; margin-bottom: 1rem;">Our Values</h3>
+            <div class="value-card">
+                <i class="fas fa-handshake value-icon"></i>
+                <h3>Our Values</h3>
                 <p>Integrity, collaboration, innovation, and community commitment guide everything we do to support our members' success.</p>
             </div>
         </div>
@@ -36,28 +36,28 @@
     <div class="container">
         <h2>Featured Members</h2>
         <p>Meet some of our most trusted and verified business members.</p>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 3rem;">
+        <div class="cards-grid cards-grid-sm">
             <% featuredUsers.slice(0, 4).forEach(user => { %>
-            <div style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,51,102,0.1); text-align: center;">
+            <div class="showcase-card align-center">
                 <% if (user.profileImageUrl) { %>
-                <img src="<%= user.profileImageUrl %>" alt="<%= user.businessName %>" style="width: 80px; height: 80px; border-radius: 50%; margin-bottom: 1rem; object-fit: cover;">
+                <img src="<%= user.profileImageUrl %>" alt="<%= user.businessName %>" class="avatar-lg">
                 <% } else { %>
-                <div style="width: 80px; height: 80px; border-radius: 50%; background: #E6F3FF; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 2rem; color: #003366;">
+                <div class="avatar-lg avatar-fallback">
                     <%= user.businessName ? user.businessName.charAt(0).toUpperCase() : '?' %>
                 </div>
                 <% } %>
-                <h4 style="color: #003366; margin-bottom: 0.5rem;"><%= user.businessName %></h4>
+                <h4 class="card-title"><%= user.businessName %></h4>
                 <% if (user.businessDescription) { %>
-                <p style="color: #666; font-size: 0.9rem; margin-bottom: 1rem;"><%= user.businessDescription.substring(0, 100) %>...</p>
+                <p class="card-copy"><%= user.businessDescription.substring(0, 100) %>...</p>
                 <% } %>
-                <div style="display: flex; justify-content: center; gap: 0.5rem;">
-                    <span style="background: #D4AF37; color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem;">Trust: <%= user.trustScore || 0 %></span>
+                <div class="pill-row center">
+                    <span class="pill pill-trust">Trust: <%= user.trustScore || 0 %></span>
                 </div>
             </div>
             <% }) %>
             <% if (featuredUsers.length === 0) { %>
-            <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: #666;">
-                <i class="fas fa-users" style="font-size: 3rem; margin-bottom: 1rem; color: #E6F3FF;"></i>
+            <div class="empty-state">
+                <i class="fas fa-users empty-icon"></i>
                 <p>Featured members will appear here once the community grows.</p>
             </div>
             <% } %>
@@ -69,28 +69,28 @@
     <div class="container">
         <h2>Featured Products</h2>
         <p>Discover products and services from our trusted member businesses.</p>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 3rem;">
+        <div class="cards-grid cards-grid-sm">
             <% featuredProducts.slice(0, 4).forEach(product => { %>
-            <div style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,51,102,0.1); text-align: center;">
+            <div class="showcase-card align-center">
                 <% if (product.imageUrl) { %>
-                <img src="<%= product.imageUrl %>" alt="<%= product.name %>" style="width: 100%; height: 150px; object-fit: cover; border-radius: 4px; margin-bottom: 1rem;">
+                <img src="<%= product.imageUrl %>" alt="<%= product.name %>" class="media-cover media-sm">
                 <% } else { %>
-                <div style="width: 100%; height: 150px; background: #E6F3FF; display: flex; align-items: center; justify-content: center; border-radius: 4px; margin-bottom: 1rem;">
-                    <i class="fas fa-box" style="font-size: 3rem; color: #003366;"></i>
+                <div class="media-cover media-sm media-fallback">
+                    <i class="fas fa-box"></i>
                 </div>
                 <% } %>
-                <h4 style="color: #003366; margin-bottom: 0.5rem;"><%= product.name %></h4>
+                <h4 class="card-title"><%= product.name %></h4>
                 <% if (product.description) { %>
-                <p style="color: #666; font-size: 0.9rem; margin-bottom: 1rem;"><%= product.description.substring(0, 80) %>...</p>
+                <p class="card-copy"><%= product.description.substring(0, 80) %>...</p>
                 <% } %>
-                <div style="font-weight: bold; color: #D4AF37; font-size: 1.2rem;">
+                <div class="price-text">
                     <%= product.price ? '$' + product.price : 'Price on request' %>
                 </div>
             </div>
             <% }) %>
             <% if (featuredProducts.length === 0) { %>
-            <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: #666;">
-                <i class="fas fa-shopping-cart" style="font-size: 3rem; margin-bottom: 1rem; color: #E6F3FF;"></i>
+            <div class="empty-state">
+                <i class="fas fa-shopping-cart empty-icon"></i>
                 <p>Featured products will appear here as members list their items.</p>
             </div>
             <% } %>
@@ -98,13 +98,13 @@
     </div>
 </section>
 
-<section id="cta" class="section" style="background: linear-gradient(135deg, #003366 0%, #002244 100%); color: white; text-align: center;">
+<section id="cta" class="section cta-band">
     <div class="container">
-        <h2 style="color: white; margin-bottom: 1rem;">Ready to Join Our Business Community?</h2>
-        <p style="font-size: 1.2rem; margin-bottom: 2rem; color: #E6F3FF;">Become a member today and unlock exclusive benefits, networking opportunities, and resources to grow your business.</p>
-        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+        <h2>Ready to Join Our Business Community?</h2>
+        <p>Become a member today and unlock exclusive benefits, networking opportunities, and resources to grow your business.</p>
+        <div class="hero-actions">
             <button class="cta-button" onclick="window.location.href='/register-step1'">Join Now</button>
-            <button class="cta-button" style="background: transparent; border: 2px solid #D4AF37; color: #D4AF37;" onclick="window.location.href='/marketplace'">Explore Directory</button>
+            <button class="cta-button button-accent-outline" onclick="window.location.href='/marketplace'">Explore Directory</button>
         </div>
     </div>
 </section>
@@ -113,19 +113,19 @@
     <div class="container">
         <h2>Upcoming Events</h2>
         <p>Join our upcoming events to network, learn, and grow your business.</p>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 3rem;">
+        <div class="cards-grid cards-grid-md">
             <% upcomingEvents.forEach(event => { %>
-            <div style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,51,102,0.1);">
-                <h4 style="color: #003366; margin-bottom: 1rem;"><%= event.title %></h4>
-                <p style="color: #666; margin-bottom: 1rem;"><%= event.description %></p>
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <div>
-                        <i class="fas fa-calendar" style="color: #D4AF37; margin-right: 0.5rem;"></i>
+            <div class="showcase-card">
+                <h4 class="card-title"><%= event.title %></h4>
+                <p class="card-copy"><%= event.description %></p>
+                <div class="meta-row">
+                    <div class="meta-item">
+                        <i class="fas fa-calendar"></i>
                         <%= event.eventDate ? (function() { try { return new Date(event.eventDate).toLocaleDateString(); } catch(e) { return 'TBD'; } })() : 'TBD' %>
                     </div>
                     <% if (event.location) { %>
-                    <div>
-                        <i class="fas fa-map-marker-alt" style="color: #D4AF37; margin-right: 0.5rem;"></i>
+                    <div class="meta-item">
+                        <i class="fas fa-map-marker-alt"></i>
                         <%= event.location %>
                     </div>
                     <% } %>
@@ -133,8 +133,8 @@
             </div>
             <% }) %>
             <% if (upcomingEvents.length === 0) { %>
-            <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: #666;">
-                <i class="fas fa-calendar" style="font-size: 3rem; margin-bottom: 1rem; color: #E6F3FF;"></i>
+            <div class="empty-state">
+                <i class="fas fa-calendar empty-icon"></i>
                 <p>No upcoming events scheduled. Check back soon!</p>
             </div>
             <% } %>

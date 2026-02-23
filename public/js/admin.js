@@ -172,7 +172,7 @@ function displayDenominations(denominations) {
                             <button class="btn-secondary btn-small" onclick="editDenomination(${denomination.id}, '${denomination.name}', '${denomination.description || ''}')">
                                 <i class="fas fa-edit"></i> Edit
                             </button>
-                            <button class="btn-secondary btn-small" onclick="deleteDenomination(${denomination.id}, '${denomination.name}')" style="background: #dc3545; color: white;">
+                            <button class="btn-danger btn-small" onclick="deleteDenomination(${denomination.id}, '${denomination.name}')">
                                 <i class="fas fa-trash"></i> Delete
                             </button>
                         </td>

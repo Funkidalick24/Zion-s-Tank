@@ -113,48 +113,53 @@ function renderEvents(events) {
     const eventsList = document.getElementById('events-list');
 
     if (events.length === 0) {
-        eventsList.innerHTML = '<p style="text-align: center; grid-column: 1 / -1; color: #6C757D;">No events found.</p>';
+        eventsList.innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-calendar-alt empty-icon"></i>
+                <p>No events found.</p>
+            </div>
+        `;
         return;
     }
 
     eventsList.innerHTML = events.map(event => `
-        <div class="event-card" style="background: white; border-radius: 8px; padding: 1.5rem; box-shadow: 0 4px 20px rgba(0,51,102,0.1);">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
-                <h4 style="color: #003366; margin: 0; font-size: 1.2rem;">${event.title}</h4>
-                <span class="event-type" style="background: #D4AF37; color: #003366; padding: 0.25rem 0.75rem; border-radius: 15px; font-size: 0.8rem; font-weight: 600;">
+        <div class="event-card showcase-card">
+            <div class="event-card-top">
+                <h4 class="card-title">${event.title}</h4>
+                <span class="pill pill-verified">
                     ${event.eventType}
                 </span>
             </div>
 
-            <p style="color: #6C757D; margin-bottom: 1rem; line-height: 1.5;">${event.description.substring(0, 150)}${event.description.length > 150 ? '...' : ''}</p>
+            <p class="card-copy">${event.description.substring(0, 150)}${event.description.length > 150 ? '...' : ''}</p>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
-                <div>
-                    <i class="fas fa-calendar" style="color: #D4AF37; margin-right: 0.5rem;"></i>
-                    <span style="color: #003366;">${formatDate(event.eventDate)}</span>
+            <div class="event-meta-grid">
+                <div class="meta-item">
+                    <i class="fas fa-calendar"></i>
+                    <span>${formatDate(event.eventDate)}</span>
                 </div>
-                <div>
-                    <i class="fas fa-clock" style="color: #D4AF37; margin-right: 0.5rem;"></i>
-                    <span style="color: #003366;">${formatTime(event.startTime)} - ${formatTime(event.endTime)}</span>
+                <div class="meta-item">
+                    <i class="fas fa-clock"></i>
+                    <span>${formatTime(event.startTime)} - ${formatTime(event.endTime)}</span>
                 </div>
             </div>
 
-            <div style="margin-bottom: 1rem;">
-                ${event.location ? `<i class="fas fa-map-marker-alt" style="color: #D4AF37; margin-right: 0.5rem;"></i><span>${event.location}</span>` : ''}
-                ${event.virtualLink ? `<i class="fas fa-video" style="color: #D4AF37; margin-right: 0.5rem;"></i><span>Virtual Event</span>` : ''}
+            <div class="event-location">
+                ${event.location ? `<span class="meta-item"><i class="fas fa-map-marker-alt"></i>${event.location}</span>` : ''}
+                ${event.virtualLink ? `<span class="meta-item"><i class="fas fa-video"></i>Virtual Event</span>` : ''}
             </div>
 
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <div style="font-size: 0.9rem; color: #6C757D;">
-                    <i class="fas fa-users" style="margin-right: 0.5rem;"></i>
+            <div class="card-actions">
+                <div class="card-meta">
+                    <i class="fas fa-users"></i>
                     ${event.currentAttendees} attending${event.maxAttendees ? ` / ${event.maxAttendees} max` : ''}
                 </div>
                 <div>
-                    <button onclick="viewEventDetails(${event.id})" class="cta-button" style="font-size: 0.9rem; padding: 0.5rem 1rem;">View Details</button>
+                    <button onclick="viewEventDetails(${event.id})" class="cta-button button-sm">View Details</button>
                 </div>
             </div>
 
-            <div style="margin-top: 0.5rem; font-size: 0.8rem; color: #6C757D;">
+            <div class="card-meta">
                 Created by: ${event.creator.firstName} ${event.creator.lastName}
             </div>
         </div>
@@ -210,8 +215,8 @@ function showEventModal(event, userAttendance) {
                            rsvpStatus === 'maybe' ? 'Maybe' : 'RSVP';
 
         rsvpButton = `
-            <div style="margin-top: 2rem; text-align: center;">
-                <select id="rsvp-select" style="margin-right: 1rem; padding: 0.5rem; border: 2px solid #E6F3FF; border-radius: 6px;">
+            <div class="event-rsvp-wrap">
+                <select id="rsvp-select" class="event-rsvp-select">
                     <option value="attending" ${rsvpStatus === 'attending' ? 'selected' : ''}>Attending</option>
                     <option value="maybe" ${rsvpStatus === 'maybe' ? 'selected' : ''}>Maybe</option>
                     <option value="declined" ${rsvpStatus === 'declined' ? 'selected' : ''}>Declined</option>
@@ -223,9 +228,9 @@ function showEventModal(event, userAttendance) {
 
     details.innerHTML = `
         <h2>${event.title}</h2>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0;">
+        <div class="event-detail-grid">
             <div>
-                <h3 style="color: #003366;">Event Details</h3>
+                <h3 class="event-detail-heading">Event Details</h3>
                 <p><strong>Date:</strong> ${formatDate(event.eventDate)}</p>
                 <p><strong>Time:</strong> ${formatTime(event.startTime)} - ${formatTime(event.endTime)}</p>
                 <p><strong>Type:</strong> ${event.eventType}</p>
@@ -234,9 +239,9 @@ function showEventModal(event, userAttendance) {
                 ${event.virtualLink ? `<p><strong>Virtual Link:</strong> <a href="${event.virtualLink}" target="_blank">${event.virtualLink}</a></p>` : ''}
             </div>
             <div>
-                <h3 style="color: #003366;">Description</h3>
-                <p style="line-height: 1.6;">${event.description}</p>
-                <p style="margin-top: 1rem; font-size: 0.9rem; color: #6C757D;">
+                <h3 class="event-detail-heading">Description</h3>
+                <p class="card-copy">${event.description}</p>
+                <p class="card-meta">
                     <strong>Organized by:</strong> ${event.creator.firstName} ${event.creator.lastName}
                     ${event.creator.businessName ? `(${event.creator.businessName})` : ''}
                 </p>
@@ -377,32 +382,32 @@ function showMyEventsModal(events) {
 
     let eventsHtml = '';
     if (events.length === 0) {
-        eventsHtml = '<p style="text-align: center; color: #6C757D;">You haven\'t created any events yet.</p>';
+        eventsHtml = '<p class="card-copy align-center">You haven\'t created any events yet.</p>';
     } else {
         eventsHtml = events.map(event => `
-            <div class="event-card" style="background: white; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; box-shadow: 0 2px 10px rgba(0,51,102,0.1);">
-                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
-                    <h4 style="color: #003366; margin: 0; font-size: 1rem;">${event.title}</h4>
-                    <span class="event-type" style="background: #D4AF37; color: #003366; padding: 0.2rem 0.5rem; border-radius: 10px; font-size: 0.7rem; font-weight: 600;">
+            <div class="event-card showcase-card compact-card">
+                <div class="event-card-top">
+                    <h4 class="card-title">${event.title}</h4>
+                    <span class="pill pill-verified">
                         ${event.eventType}
                     </span>
                 </div>
-                <p style="color: #6C757D; margin-bottom: 0.5rem; font-size: 0.9rem;">${formatDate(event.eventDate)} at ${formatTime(event.startTime)}</p>
-                <p style="color: #6C757D; margin-bottom: 0.5rem; font-size: 0.8rem;">${event.currentAttendees} attending${event.maxAttendees ? ` / ${event.maxAttendees} max` : ''}</p>
-                <div style="display: flex; gap: 0.5rem;">
-                    <button onclick="viewEventDetails(${event.id})" class="cta-button" style="font-size: 0.8rem; padding: 0.4rem 0.8rem;">View</button>
-                    <button onclick="editEvent(${event.id})" class="cta-button" style="font-size: 0.8rem; padding: 0.4rem 0.8rem; background: transparent; border: 1px solid #D4AF37; color: #003366;">Edit</button>
+                <p class="card-meta">${formatDate(event.eventDate)} at ${formatTime(event.startTime)}</p>
+                <p class="card-meta">${event.currentAttendees} attending${event.maxAttendees ? ` / ${event.maxAttendees} max` : ''}</p>
+                <div class="compact-actions">
+                    <button onclick="viewEventDetails(${event.id})" class="cta-button button-xs">View</button>
+                    <button onclick="editEvent(${event.id})" class="cta-button button-xs button-secondary">Edit</button>
                 </div>
             </div>
         `).join('');
     }
 
     modal.innerHTML = `
-        <div class="auth-modal-content" style="max-width: 600px; max-height: 80vh; overflow-y: auto;">
+        <div class="auth-modal-content auth-modal-wide auth-modal-scroll">
             <button class="auth-modal-close" onclick="closeMyEventsModal()">&times;</button>
-            <h2 style="text-align: center; margin-bottom: 1.5rem;">My Events</h2>
-            <div style="margin-bottom: 1rem;">
-                <button onclick="showCreateEventModal()" class="cta-button" style="width: 100%;">Create New Event</button>
+            <h2 class="auth-title">My Events</h2>
+            <div class="modal-action-row">
+                <button onclick="showCreateEventModal()" class="cta-button filter-submit">Create New Event</button>
             </div>
             <div id="my-events-list">
                 ${eventsHtml}
@@ -514,20 +519,12 @@ function setView(view) {
 
     if (view === 'list') {
         listBtn.classList.add('active');
-        listBtn.style.background = '#D4AF37';
-        listBtn.style.color = '#003366';
         calendarBtn.classList.remove('active');
-        calendarBtn.style.background = 'transparent';
-        calendarBtn.style.color = '#6C757D';
         listView.style.display = 'block';
         calendarView.style.display = 'none';
     } else {
         calendarBtn.classList.add('active');
-        calendarBtn.style.background = '#D4AF37';
-        calendarBtn.style.color = '#003366';
         listBtn.classList.remove('active');
-        listBtn.style.background = 'transparent';
-        listBtn.style.color = '#6C757D';
         calendarView.style.display = 'block';
         listView.style.display = 'none';
         // Initialize calendar if not already done
@@ -539,8 +536,8 @@ function setView(view) {
 function initializeCalendar() {
     const calendarContainer = document.getElementById('calendar-container');
     calendarContainer.innerHTML = `
-        <div style="text-align: center; padding: 3rem; color: #6C757D;">
-            <i class="fas fa-calendar-alt" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+        <div class="empty-state">
+            <i class="fas fa-calendar-alt empty-icon"></i>
             <p>Calendar view coming soon! For now, please use the list view.</p>
         </div>
     `;

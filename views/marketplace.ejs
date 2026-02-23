@@ -2,9 +2,9 @@
     <div class="container">
         <h2>Member Marketplace</h2>
         <p>Buy and sell products and services within our trusted community. All transactions are between verified members.</p>
-        <div style="display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; justify-content: center;">
+        <div class="hero-actions">
             <button class="cta-button" onclick="window.location.href='/directory'">View Directory</button>
-            <button class="cta-button" style="background: transparent; border: 2px solid #D4AF37; color: #003366;" onclick="document.getElementById('account-btn').click()">List Your Items</button>
+            <button class="cta-button button-secondary" onclick="document.getElementById('account-btn').click()">List Your Items</button>
         </div>
     </div>
 </section>
@@ -12,24 +12,24 @@
 <section class="section">
     <div class="container">
         <!-- Search and Filter Bar -->
-        <div style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,51,102,0.1); margin-bottom: 3rem;">
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; align-items: end;">
-                <div>
-                    <label for="search-input" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #003366;">Search Products</label>
-                    <input type="text" id="search-input" placeholder="Search products, services..." style="width: 100%; padding: 0.8rem; border: 2px solid #E6F3FF; border-radius: 6px; font-size: 1rem;">
+        <div class="filter-panel">
+            <div class="filter-grid">
+                <div class="filter-field">
+                    <label for="search-input">Search Products</label>
+                    <input type="text" id="search-input" placeholder="Search products, services..." class="filter-control">
                 </div>
-                <div>
-                    <label for="category-filter" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #003366;">Category</label>
-                    <select id="category-filter" style="width: 100%; padding: 0.8rem; border: 2px solid #E6F3FF; border-radius: 6px; font-size: 1rem;">
+                <div class="filter-field">
+                    <label for="category-filter">Category</label>
+                    <select id="category-filter" class="filter-control">
                         <option value="">All Categories</option>
                         <% categories.forEach(cat => { %>
                         <option value="<%= cat.id %>" <%= filters.category == cat.id ? 'selected' : '' %>><%= cat.name %></option>
                         <% }) %>
                     </select>
                 </div>
-                <div>
-                    <label for="price-filter" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #003366;">Price Range</label>
-                    <select id="price-filter" style="width: 100%; padding: 0.8rem; border: 2px solid #E6F3FF; border-radius: 6px; font-size: 1rem;">
+                <div class="filter-field">
+                    <label for="price-filter">Price Range</label>
+                    <select id="price-filter" class="filter-control">
                         <option value="">All Prices</option>
                         <option value="0-100">Under $100</option>
                         <option value="100-500">$100 - $500</option>
@@ -38,60 +38,58 @@
                         <option value="5000+">$5,000+</option>
                     </select>
                 </div>
-                <div>
-                    <button id="search-btn" class="cta-button" style="width: 100%;">Search</button>
+                <div class="filter-field">
+                    <button id="search-btn" class="cta-button filter-submit">Search</button>
                 </div>
             </div>
         </div>
 
         <!-- Marketplace Products -->
         <div id="marketplace-view" class="view-container">
-            <h3 style="text-align: center; margin-bottom: 2rem; color: #003366;">Available Products & Services</h3>
-            <div id="products-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+            <h3 class="section-subheading">Available Products & Services</h3>
+            <div id="products-list" class="cards-grid cards-grid-md">
                 <% products.forEach(product => { %>
-                <div class="product-item" style="background: white; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,51,102,0.1); overflow: hidden;">
-                    <div style="padding: 1.5rem;">
+                <div class="product-item showcase-card">
                         <% if (product.imageUrls && product.imageUrls.length > 0) { %>
-                        <img src="<%= product.imageUrls[0] %>" alt="<%= product.name %>" style="width: 100%; height: 200px; object-fit: cover; border-radius: 4px; margin-bottom: 1rem;">
+                        <img src="<%= product.imageUrls[0] %>" alt="<%= product.name %>" class="media-cover media-md">
                         <% } else { %>
-                        <div style="width: 100%; height: 200px; background: #E6F3FF; display: flex; align-items: center; justify-content: center; border-radius: 4px; margin-bottom: 1rem;">
-                            <i class="fas fa-box" style="font-size: 3rem; color: #003366;"></i>
+                        <div class="media-cover media-md media-fallback">
+                            <i class="fas fa-box"></i>
                         </div>
                         <% } %>
-                        <h4 style="color: #003366; margin-bottom: 0.5rem;"><%= product.name %></h4>
+                        <h4 class="card-title"><%= product.name %></h4>
                         <% if (product.description) { %>
-                        <p style="color: #666; font-size: 0.9rem; margin-bottom: 1rem;"><%= product.description.substring(0, 100) %>...</p>
+                        <p class="card-copy"><%= product.description.substring(0, 100) %>...</p>
                         <% } %>
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                            <div style="font-weight: bold; color: #D4AF37; font-size: 1.2rem;">
+                        <div class="price-row">
+                            <div class="price-text">
                                 $<%= product.price %>
                             </div>
                             <% if (product.seller) { %>
-                            <div style="font-size: 0.8rem; color: #666;">
+                            <div class="card-meta">
                                 by <%= product.seller.businessName || `${product.seller.firstName} ${product.seller.lastName}` %>
                             </div>
                             <% } %>
                         </div>
-                        <div style="display: flex; gap: 0.5rem;">
+                        <div class="pill-row">
                             <% if (product.seller && product.seller.isVerified) { %>
-                            <span style="background: #D4AF37; color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem;">Verified Seller</span>
+                            <span class="pill pill-verified">Verified Seller</span>
                             <% } %>
                             <% if (product.category) { %>
-                            <span style="background: #003366; color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem;"><%= product.category.name %></span>
+                            <span class="pill pill-primary"><%= product.category.name %></span>
                             <% } %>
                         </div>
-                    </div>
                 </div>
                 <% }) %>
                 <% if (products.length === 0) { %>
-                <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: #666;">
-                    <i class="fas fa-shopping-cart" style="font-size: 3rem; margin-bottom: 1rem; color: #E6F3FF;"></i>
+                <div class="empty-state">
+                    <i class="fas fa-shopping-cart empty-icon"></i>
                     <p>No products found matching your criteria.</p>
                 </div>
                 <% } %>
             </div>
             <% if (pagination.totalPages > 1) { %>
-            <div style="text-align: center; margin-top: 2rem;">
+            <div class="pagination-wrap">
                 <% for (let i = 1; i <= pagination.totalPages; i++) { %>
                 <a href="?page=<%= i %><%= filters.q ? '&q=' + encodeURIComponent(filters.q) : '' %><%= filters.category ? '&category=' + filters.category : '' %><%= filters.price ? '&price=' + filters.price : '' %><%= filters.sort ? '&sort=' + filters.sort : '' %>"
                    class="pagination-link <%= i === pagination.currentPage ? 'active' : '' %>">

@@ -65,7 +65,7 @@ function displayProfileData(user) {
 
     // Show verification tab for sellers
     if (user.role === 'seller' || user.role === 'both') {
-        document.getElementById('verification-tab-btn').style.display = 'inline-block';
+        document.getElementById('verification-tab-btn').classList.remove('is-hidden-inline');
     }
 
     profileContent.innerHTML = `
@@ -320,7 +320,7 @@ function loadVerificationStatus() {
                         <p>Your account has been verified. You can now sell products with confidence.</p>
                     </div>
                 `;
-                formContainer.style.display = 'none';
+                formContainer.classList.add('is-hidden');
             } else {
                 // User is not verified, show verification form
                 statusContainer.innerHTML = `
@@ -330,7 +330,7 @@ function loadVerificationStatus() {
                         <p>To build trust with buyers, please verify your identity by submitting documentation.</p>
                     </div>
                 `;
-                formContainer.style.display = 'block';
+                formContainer.classList.remove('is-hidden');
                 loadExistingVerificationRequest();
             }
         }
@@ -362,7 +362,7 @@ function loadExistingVerificationRequest() {
                         <small>Submitted: ${new Date(latestVerification.submittedAt).toLocaleDateString()}</small>
                     </div>
                 `;
-                document.getElementById('verification-form-container').style.display = 'none';
+                document.getElementById('verification-form-container').classList.add('is-hidden');
             } else if (latestVerification.status === 'rejected') {
                 statusContainer.innerHTML = `
                     <div class="verification-status rejected">
@@ -373,7 +373,7 @@ function loadExistingVerificationRequest() {
                         ${latestVerification.notes ? `<p><strong>Reason:</strong> ${latestVerification.notes}</p>` : ''}
                     </div>
                 `;
-                document.getElementById('verification-form-container').style.display = 'block';
+                document.getElementById('verification-form-container').classList.remove('is-hidden');
             }
         }
     })

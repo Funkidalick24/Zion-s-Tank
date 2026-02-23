@@ -274,10 +274,10 @@ async function openMessageThread(messageId) {
         const content = document.getElementById('message-thread-content');
         content.innerHTML = `<h2>Message Thread</h2>` +
             thread.map(msg => `
-                <div style='margin-bottom:1rem; padding:1rem; background:#F8F9FA; border-radius:8px;'>
-                    <div style='font-weight:bold;'>From: ${msg.senderName || msg.sender || 'Unknown'}</div>
-                    <div style='font-size:0.9rem; color:#003366;'>${msg.createdAt ? new Date(msg.createdAt).toLocaleString() : ''}</div>
-                    <div style='margin-top:0.5rem;'>${msg.content || msg.text || ''}</div>
+                <div class='message-thread-item'>
+                    <div class='message-thread-from'>From: ${msg.senderName || msg.sender || 'Unknown'}</div>
+                    <div class='message-thread-time'>${msg.createdAt ? new Date(msg.createdAt).toLocaleString() : ''}</div>
+                    <div class='message-thread-body'>${msg.content || msg.text || ''}</div>
                 </div>
             `).join('');
         modal.style.display = 'block';
@@ -432,7 +432,7 @@ function displayProducts(products, searchTerm = '', category = '', location = ''
     productsList.innerHTML = '';
 
     if (filteredProducts.length === 0) {
-        productsList.innerHTML = '<div style="text-align: center; padding: 3rem; color: #6C757D;"><i class="fas fa-shopping-cart" style="font-size: 3rem; color: #D4AF37; margin-bottom: 1rem;"></i><h3>No products found</h3><p>Try adjusting your search criteria</p></div>';
+        productsList.innerHTML = '<div class="empty-state"><i class="fas fa-shopping-cart empty-icon"></i><h3>No products found</h3><p>Try adjusting your search criteria</p></div>';
         return;
     }
 
@@ -444,11 +444,11 @@ function displayProducts(products, searchTerm = '', category = '', location = ''
             <h3>${product.name || 'Product Name'}</h3>
             <p>${product.description || 'Product description'}</p>
             <p class="price">$${product.price || 'N/A'}</p>
-            <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+            <div class="product-card-actions">
                 <button class="cta-button" onclick="viewProduct(${product.id})">
                     <i class="fas fa-eye"></i> View Details
                 </button>
-                <button class="cta-button" style="background: transparent; border: 2px solid #D4AF37; color: #003366;" onclick="contactSeller(${product.id})">
+                <button class="cta-button button-secondary" onclick="contactSeller(${product.id})">
                     <i class="fas fa-envelope"></i> Contact Seller
                 </button>
             </div>
@@ -469,12 +469,12 @@ async function viewProduct(productId) {
         const modal = document.getElementById('product-modal');
         const content = document.getElementById('product-detail-content');
         content.innerHTML = `
-            <h2 style="color: #003366;">${product.name}</h2>
-            <p>${product.description}</p>
+            <h2 class="card-title">${product.name}</h2>
+            <p class="card-copy">${product.description}</p>
             <p><strong>Price:</strong> $${product.price}</p>
             <p><strong>Category:</strong> ${product.category ? product.category.name : 'N/A'}</p>
             <p><strong>Seller:</strong> ${product.seller ? product.seller.firstName + ' ' + product.seller.lastName : 'N/A'}</p>
-            <div style="margin-top: 1.5rem;">
+            <div class="modal-action-row">
                 <button class="cta-button" onclick="contactSeller(${product.id})"><i class='fas fa-envelope'></i> Contact Seller</button>
             </div>
         `;
@@ -504,8 +504,10 @@ async function contactSeller(productId) {
                 <label for='message'>Message</label>
                 <textarea id='message' name='message' rows='4' required></textarea>
             </div>
-            <button type='submit' class='cta-button'><i class='fas fa-paper-plane'></i> Send Message</button>
-            <button type='button' class='cta-button' style='background: transparent; border: 2px solid #D4AF37; color: #003366; margin-left: 1rem;' onclick='viewProduct(${productId})'>Back to Product</button>
+            <div class="modal-action-row">
+                <button type='submit' class='cta-button'><i class='fas fa-paper-plane'></i> Send Message</button>
+                <button type='button' class='cta-button button-secondary' onclick='viewProduct(${productId})'>Back to Product</button>
+            </div>
             <div id='contact-seller-message'></div>
         </form>`;
     modal.style.display = 'block';
@@ -567,8 +569,8 @@ async function loadProfile() {
 
             profileContent.innerHTML = `
                 <h3>Your Profile</h3>
-                <div style="background: linear-gradient(135deg, #FFFFFF 0%, #F8F9FA 100%); padding: 2rem; border-radius: 15px; box-shadow: 0 8px 30px rgba(0, 51, 102, 0.15);">
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem;">
+                <div class="profile-summary-card">
+                    <div class="review-two-col">
                         <div><strong>Name:</strong> ${user.firstName} ${user.lastName}</div>
                         <div><strong>Email:</strong> ${user.email}</div>
                         <div><strong>Role:</strong> ${user.role}</div>
@@ -578,7 +580,7 @@ async function loadProfile() {
                     </div>
                     ${user.businessName ? `<div><strong>Business:</strong> ${user.businessName}</div>` : ''}
                     ${user.denominationName ? `<div><strong>Denomination:</strong> ${user.denominationName}</div>` : ''}
-                    <div style="margin-top: 2rem;">
+                    <div class="modal-action-row">
                         <button class="cta-button" onclick="showEditProfileModal()">Edit Profile</button>
                     </div>
                 </div>
@@ -1143,7 +1145,7 @@ function updateAuthUI() {
         let adminButton = '';
         if (currentUser.role === 'admin') {
             adminButton = `
-                <button class="cta-button" style="background: transparent; border: 2px solid #FF9800; color: #FF9800; margin-bottom: 0.5rem;" onclick="window.location.href='/admin'">
+                <button class="cta-button button-warning-outline" onclick="window.location.href='/admin'">
                     <i class="fas fa-cog"></i> Admin Dashboard
                 </button>
             `;
@@ -1160,10 +1162,10 @@ function updateAuthUI() {
                 <button class="cta-button" onclick="window.location.href='/events'">
                     <i class="fas fa-calendar-plus"></i> Create Event
                 </button>
-                <button class="cta-button" style="background: transparent; border: 2px solid #D4AF37; color: #003366;" onclick="window.location.href='/profile'">
+                <button class="cta-button button-secondary" onclick="window.location.href='/profile'">
                     <i class="fas fa-user"></i> View Profile
                 </button>
-                <button class="cta-button" style="background: transparent; border: 2px solid #FF6B6B; color: #FF6B6B; margin-top: 0.5rem;" onclick="handleLogoutAll()">
+                <button class="cta-button button-danger-outline popover-space-top" onclick="handleLogoutAll()">
                     <i class="fas fa-sign-out-alt"></i> Logout All Devices
                 </button>
             </div>
@@ -1193,7 +1195,7 @@ function updateAuthUI() {
                 <button class="cta-button" onclick="window.location.href='/register-step1'">
                     <i class="fas fa-user-plus"></i> Join Chamber
                 </button>
-                <div style="margin-top: 1rem; font-size: 0.9rem; color: #6C757D;">
+                <div class="account-popover-note">
                     <i class="fas fa-info-circle"></i> Become a member to access exclusive benefits
                 </div>
             </div>
@@ -1383,43 +1385,13 @@ function showVerificationPrompt() {
     const prompt = document.createElement('div');
     prompt.className = 'verification-prompt';
     prompt.innerHTML = `
-        <div style="
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #fff3cd;
-            border: 1px solid #ffeaa7;
-            color: #856404;
-            padding: 1.5rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-            z-index: 10000;
-            max-width: 400px;
-            font-weight: 500;
-        ">
-            <i class="fas fa-exclamation-triangle" style="margin-right: 0.5rem;"></i>
+        <div class="verification-prompt-card">
+            <i class="fas fa-exclamation-triangle prompt-icon"></i>
             <strong>Verification Required</strong><br>
-            <span style="font-size: 0.9rem;">As a seller, you need to verify your identity to build trust with buyers.</span><br>
-            <div style="margin-top: 1rem;">
-                <button onclick="window.location.href='/profile'" style="
-                    background: #D4AF37;
-                    color: #003366;
-                    border: none;
-                    padding: 0.5rem 1rem;
-                    border-radius: 4px;
-                    cursor: pointer;
-                    font-weight: 500;
-                    margin-right: 0.5rem;
-                ">Verify Now</button>
-                <button onclick="this.parentElement.parentElement.remove()" style="
-                    background: transparent;
-                    color: #856404;
-                    border: 1px solid #856404;
-                    padding: 0.5rem 1rem;
-                    border-radius: 4px;
-                    cursor: pointer;
-                    font-weight: 500;
-                ">Later</button>
+            <span class="prompt-note">As a seller, you need to verify your identity to build trust with buyers.</span><br>
+            <div class="prompt-actions">
+                <button onclick="window.location.href='/profile'" class="prompt-btn prompt-btn-primary">Verify Now</button>
+                <button onclick="this.parentElement.parentElement.remove()" class="prompt-btn prompt-btn-secondary">Later</button>
             </div>
         </div>
     `;
@@ -1443,19 +1415,7 @@ function showNotification(message, type = 'info') {
         const notification = document.createElement('div');
         notification.className = `notification ${type}`;
         notification.innerHTML = `
-            <div style="
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: ${type === 'success' ? '#4CAF50' : type === 'error' ? '#f44336' : '#2196F3'};
-                color: white;
-                padding: 1rem 1.5rem;
-                border-radius: 6px;
-                box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-                z-index: 10000;
-                font-weight: 500;
-                max-width: 400px;
-            ">
+            <div class="fallback-notification ${type}">
                 <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i>
                 ${message}
             </div>
@@ -1630,7 +1590,7 @@ function loadDirectoryFromCache() {
     } else {
         const directoryList = document.getElementById('directory-list');
         if (directoryList) {
-            directoryList.innerHTML = '<div style="text-align: center; padding: 3rem; color: #6C757D;"><i class="fas fa-wifi" style="font-size: 3rem; color: #D4AF37; margin-bottom: 1rem;"></i><h3>No internet connection</h3><p>Cached data not available. Please check your connection.</p></div>';
+            directoryList.innerHTML = '<div class="empty-state"><i class="fas fa-wifi empty-icon"></i><h3>No internet connection</h3><p>Cached data not available. Please check your connection.</p></div>';
         }
     }
 }
@@ -1642,7 +1602,7 @@ function displayDirectory(users) {
     directoryList.innerHTML = '';
 
     if (!users || users.length === 0) {
-        directoryList.innerHTML = '<div style="text-align: center; padding: 3rem; color: #6C757D;"><i class="fas fa-search" style="font-size: 3rem; color: #D4AF37; margin-bottom: 1rem;"></i><h3>No businesses found</h3><p>Try adjusting your search criteria</p></div>';
+        directoryList.innerHTML = '<div class="empty-state"><i class="fas fa-search empty-icon"></i><h3>No businesses found</h3><p>Try adjusting your search criteria</p></div>';
         return;
     }
 
@@ -1687,7 +1647,7 @@ function displayDirectory(users) {
                 <button class="cta-button" onclick="contactBusiness(${user.id})">
                     <i class="fas fa-envelope"></i> Contact
                 </button>
-                ${user.profileImageUrl ? `<button class="cta-button" style="background: transparent; border: 2px solid #D4AF37; color: #003366;" onclick="viewProfile(${user.id})">
+                ${user.profileImageUrl ? `<button class="cta-button button-secondary" onclick="viewProfile(${user.id})">
                     <i class="fas fa-user"></i> View Profile
                 </button>` : ''}
             </div>
@@ -1871,48 +1831,48 @@ function createEditProfileModal() {
     modal.id = 'edit-profile-modal';
     modal.className = 'auth-modal';
     modal.innerHTML = `
-        <div class="auth-modal-content" style="max-width: 500px;">
+        <div class="auth-modal-content">
             <button class="auth-modal-close" onclick="closeEditProfileModal()">&times;</button>
-            <h2 style="text-align: center; margin-bottom: 2rem; color: #003366;">Edit Profile</h2>
+            <h2 class="auth-title">Edit Profile</h2>
 
             <form id="edit-profile-form">
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                <div class="review-two-col">
                     <div class="form-group">
-                        <label for="edit-first-name" style="color: #2C3E50; font-weight: 500;">First Name *</label>
-                        <input type="text" id="edit-first-name" name="firstName" required style="width: 100%; padding: 0.8rem; border: 2px solid #E6F3FF; border-radius: 8px; font-size: 1rem;">
+                        <label for="edit-first-name">First Name *</label>
+                        <input type="text" id="edit-first-name" name="firstName" required>
                     </div>
                     <div class="form-group">
-                        <label for="edit-last-name" style="color: #2C3E50; font-weight: 500;">Last Name *</label>
-                        <input type="text" id="edit-last-name" name="lastName" required style="width: 100%; padding: 0.8rem; border: 2px solid #E6F3FF; border-radius: 8px; font-size: 1rem;">
+                        <label for="edit-last-name">Last Name *</label>
+                        <input type="text" id="edit-last-name" name="lastName" required>
                     </div>
                 </div>
 
-                <div class="form-group" style="margin-bottom: 1rem;">
-                    <label for="edit-email" style="color: #2C3E50; font-weight: 500;">Email *</label>
-                    <input type="email" id="edit-email" name="email" required style="width: 100%; padding: 0.8rem; border: 2px solid #E6F3FF; border-radius: 8px; font-size: 1rem;">
+                <div class="form-group">
+                    <label for="edit-email">Email *</label>
+                    <input type="email" id="edit-email" name="email" required>
                 </div>
 
-                <div class="form-group" style="margin-bottom: 1rem;">
-                    <label for="edit-phone" style="color: #2C3E50; font-weight: 500;">Phone Number</label>
-                    <input type="tel" id="edit-phone" name="phoneNumber" style="width: 100%; padding: 0.8rem; border: 2px solid #E6F3FF; border-radius: 8px; font-size: 1rem;">
+                <div class="form-group">
+                    <label for="edit-phone">Phone Number</label>
+                    <input type="tel" id="edit-phone" name="phoneNumber">
                 </div>
 
-                <div class="form-group" style="margin-bottom: 1rem;">
-                    <label for="edit-address" style="color: #2C3E50; font-weight: 500;">Address</label>
-                    <textarea id="edit-address" name="address" rows="3" style="width: 100%; padding: 0.8rem; border: 2px solid #E6F3FF; border-radius: 8px; font-size: 1rem; resize: vertical;"></textarea>
+                <div class="form-group">
+                    <label for="edit-address">Address</label>
+                    <textarea id="edit-address" name="address" rows="3"></textarea>
                 </div>
 
-                <div class="form-group" style="margin-bottom: 1rem;">
-                    <label for="edit-business-name" style="color: #2C3E50; font-weight: 500;">Business Name</label>
-                    <input type="text" id="edit-business-name" name="businessName" style="width: 100%; padding: 0.8rem; border: 2px solid #E6F3FF; border-radius: 8px; font-size: 1rem;">
+                <div class="form-group">
+                    <label for="edit-business-name">Business Name</label>
+                    <input type="text" id="edit-business-name" name="businessName">
                 </div>
 
-                <div class="form-group" style="margin-bottom: 2rem;">
-                    <label for="edit-business-description" style="color: #2C3E50; font-weight: 500;">Business Description</label>
-                    <textarea id="edit-business-description" name="businessDescription" rows="4" style="width: 100%; padding: 0.8rem; border: 2px solid #E6F3FF; border-radius: 8px; font-size: 1rem; resize: vertical;"></textarea>
+                <div class="form-group">
+                    <label for="edit-business-description">Business Description</label>
+                    <textarea id="edit-business-description" name="businessDescription" rows="4"></textarea>
                 </div>
 
-                <button type="submit" class="cta-button" style="width: 100%; margin-bottom: 1rem;">Update Profile</button>
+                <button type="submit" class="cta-button filter-submit">Update Profile</button>
                 <div id="edit-profile-message"></div>
             </form>
         </div>

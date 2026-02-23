@@ -2,9 +2,9 @@
     <div class="container">
         <h2>Zion's Tank Events & Networking</h2>
         <p>Connect with fellow business leaders through exclusive networking events, workshops, and seminars designed to foster collaboration and growth.</p>
-        <div style="display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; justify-content: center;">
+        <div class="hero-actions">
             <button id="create-event-btn" class="cta-button">Create Event</button>
-            <button id="my-events-btn" class="cta-button" style="background: transparent; border: 2px solid #D4AF37; color: #003366;">My Events</button>
+            <button id="my-events-btn" class="cta-button button-secondary">My Events</button>
         </div>
     </div>
 </section>
@@ -12,27 +12,27 @@
 <section class="section">
     <div class="container">
         <!-- View Toggle Buttons -->
-        <div style="display: flex; justify-content: center; margin-bottom: 2rem;">
-            <div style="background: white; border-radius: 25px; padding: 0.25rem; box-shadow: 0 2px 10px rgba(0,51,102,0.1);">
-                <button id="list-view-btn-1" class="view-toggle-btn active" style="background: #D4AF37; color: #003366; border: none; padding: 0.75rem 1.5rem; border-radius: 20px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+        <div class="toggle-wrap">
+            <div class="toggle-group">
+                <button id="list-view-btn-1" class="view-toggle-btn active">
                     <i class="fas fa-list"></i> List View
                 </button>
-                <button id="calendar-view-btn-1" class="view-toggle-btn" style="background: transparent; color: #6C757D; border: none; padding: 0.75rem 1.5rem; border-radius: 20px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+                <button id="calendar-view-btn-1" class="view-toggle-btn">
                     <i class="fas fa-calendar-alt"></i> Calendar View
                 </button>
             </div>
         </div>
 
         <!-- Search and Filter Bar -->
-        <div style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,51,102,0.1); margin-bottom: 3rem;">
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; align-items: end;">
-                <div>
-                    <label for="search-input" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #003366;">Search Events</label>
-                    <input type="text" id="search-input" placeholder="Search events..." style="width: 100%; padding: 0.8rem; border: 2px solid #E6F3FF; border-radius: 6px; font-size: 1rem;">
+        <div class="filter-panel">
+            <div class="filter-grid">
+                <div class="filter-field">
+                    <label for="search-input">Search Events</label>
+                    <input type="text" id="search-input" placeholder="Search events..." class="filter-control">
                 </div>
-                <div>
-                    <label for="event-type-filter" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #003366;">Event Type</label>
-                    <select id="event-type-filter" style="width: 100%; padding: 0.8rem; border: 2px solid #E6F3FF; border-radius: 6px; font-size: 1rem;">
+                <div class="filter-field">
+                    <label for="event-type-filter">Event Type</label>
+                    <select id="event-type-filter" class="filter-control">
                         <option value="">All Types</option>
                         <option value="networking">Networking</option>
                         <option value="workshop">Workshop</option>
@@ -41,9 +41,9 @@
                         <option value="other">Other</option>
                     </select>
                 </div>
-                <div>
-                    <label for="date-filter" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #003366;">Date Range</label>
-                    <select id="date-filter" style="width: 100%; padding: 0.8rem; border: 2px solid #E6F3FF; border-radius: 6px; font-size: 1rem;">
+                <div class="filter-field">
+                    <label for="date-filter">Date Range</label>
+                    <select id="date-filter" class="filter-control">
                         <option value="">All Dates</option>
                         <option value="today">Today</option>
                         <option value="week">This Week</option>
@@ -51,34 +51,22 @@
                         <option value="upcoming">Upcoming</option>
                     </select>
                 </div>
-                <div>
-                    <button id="search-btn" class="cta-button" style="width: 100%;">Search</button>
+                <div class="filter-field">
+                    <button id="search-btn" class="cta-button filter-submit">Search</button>
                 </div>
-            </div>
-        </div>
-
-        <!-- Events View Toggle -->
-        <div style="display: flex; justify-content: center; margin-bottom: 2rem;">
-            <div style="display: flex; background: #E6F3FF; border-radius: 25px; padding: 0.25rem;">
-                <button id="list-view-btn" class="view-toggle active" onclick="setView('list')">
-                    <i class="fas fa-list"></i> List
-                </button>
-                <button id="calendar-view-btn" class="view-toggle" onclick="setView('calendar')">
-                    <i class="fas fa-calendar-alt"></i> Calendar
-                </button>
             </div>
         </div>
 
         <!-- Events Container -->
         <div id="events-view" class="view-container">
-            <h3 style="text-align: center; margin-bottom: 2rem; color: #003366;">Upcoming Events</h3>
-            <div id="events-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2rem;">
+            <h3 class="section-subheading">Upcoming Events</h3>
+            <div id="events-list" class="cards-grid cards-grid-lg">
                 <!-- Events will be loaded here -->
             </div>
         </div>
 
         <!-- Calendar View Container -->
-        <div id="calendar-view" class="view-container" style="display: none;">
+        <div id="calendar-view" class="view-container is-hidden">
             <div id="calendar-container">
                 <!-- Calendar will be loaded here -->
             </div>

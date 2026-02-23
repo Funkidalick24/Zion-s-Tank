@@ -19,7 +19,7 @@
                         <button class="admin-tab active" onclick="showProfileTab('view')">View Profile</button>
                         <button class="admin-tab" onclick="showProfileTab('edit')">Edit Profile</button>
                         <button class="admin-tab" onclick="showProfileTab('security')">Security</button>
-                        <button class="admin-tab" id="verification-tab-btn" onclick="showProfileTab('verification')" style="display: none;">Verification</button>
+                        <button class="admin-tab is-hidden-inline" id="verification-tab-btn" onclick="showProfileTab('verification')">Verification</button>
                     </div>
 
                     <!-- View Profile Tab -->
@@ -111,7 +111,7 @@
                             <div id="verification-status">
                                 <!-- Verification status will be loaded here -->
                             </div>
-                            <div id="verification-form-container" style="display: none;">
+                            <div id="verification-form-container" class="is-hidden">
                                 <p class="verification-notice">As a seller, you need to verify your identity to build trust with buyers. Please provide the following information:</p>
                                 <form id="verification-form">
                                     <div class="form-group">
@@ -146,45 +146,6 @@
         </section>
     
 
-    <style>
-        .verification-status {
-            padding: 2rem;
-            border-radius: 8px;
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-        .verification-status.verified {
-            background: #d4edda;
-            border: 1px solid #c3e6cb;
-            color: #155724;
-        }
-        .verification-status.pending {
-            background: #fff3cd;
-            border: 1px solid #ffeaa7;
-            color: #856404;
-        }
-        .verification-status.rejected {
-            background: #f8d7da;
-            border: 1px solid #f5c6cb;
-            color: #721c24;
-        }
-        .verification-status i {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-        .verification-notice {
-            background: #e7f3ff;
-            padding: 1rem;
-            border-radius: 6px;
-            margin-bottom: 1.5rem;
-            border-left: 4px solid #0066cc;
-        }
-        .form-help {
-            color: #6c757d;
-            font-size: 0.875rem;
-            margin-top: 0.25rem;
-        }
-    </style>
     <script src="js/events.js"></script>
 <script src="js/profile.js"></script>
 
